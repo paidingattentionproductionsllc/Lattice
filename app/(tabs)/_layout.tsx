@@ -50,7 +50,7 @@ export default function TabLayout() {
         name="network"
         options={{
           title: 'Network',
-          tabBarIcon: ({ color, size }) => <MaterialIcons name="hub" size={size} color={color} />,
+          tabBarIcon: ({ color, size }) => <MaterialIcons name="lan" size={size} color={color} />,
         }}
       />
     </Tabs>

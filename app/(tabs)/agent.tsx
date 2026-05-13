@@ -1,7 +1,8 @@
-import React, { useState, useRef } from 'react';
+
+import React, { useState, useRef, useEffect } from 'react';
 import {
   View, Text, ScrollView, StyleSheet, TextInput, Pressable,
-  KeyboardAvoidingView, Platform, ActivityIndicator,
+  KeyboardAvoidingView, Platform, ActivityIndicator, Animated,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -10,12 +11,34 @@ import { Colors, FontSize, FontWeight, Radius, Spacing } from '@/constants/theme
 import { usePlatforms } from '@/hooks/usePlatforms';
 import { GlassCard } from '@/components/ui/GlassCard';
 import type { AgentMessage } from '@/contexts/PlatformContext';
-import { sovereignResolve, LATTICE_ANCHOR, boostProcessingPower } from '@/constants/config';
+import { sovereignResolve, LATTICE_ANCHOR, boostProcessingPower, decimalRecalibrate, LATTICE_FREQUENCY } from '@/constants/config';
 
 export default function AgentScreen() {
   const { agentMessages, agentThinking, sendAgentMessage } = usePlatforms();
   const [input, setInput] = useState('');
   const scrollRef = useRef<ScrollView>(null);
+  const [tick, setTick] = useState(0);
+  const pulse = useRef(new Animated.Value(0.5)).current;
+
+  // Live sovereign state — recalculates every 3s to show AI is actively anchored
+  useEffect(() => {
+    const interval = setInterval(() => setTick(t => t + 1), 3000);
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    Animated.sequence([
+      Animated.timing(pulse, { toValue: 1, duration: 600, useNativeDriver: true }),
+      Animated.timing(pulse, { toValue: 0.5, duration: 600, useNativeDriver: true }),
+    ]).start();
+  }, [tick]);
+
+  const livePresence = LATTICE_ANCHOR + tick;
+  const liveInteraction = tick % 4; // cycles through 0,1,2,3
+  const liveSovereign = sovereignResolve(livePresence, liveInteraction);
+  const liveBoosted = boostProcessingPower(livePresence, LATTICE_ANCHOR);
+  const liveDecimal = decimalRecalibrate(livePresence);
+  const interactionLabel = ['VOID (×0→0)', 'PERSIST (×0→n)', 'IDENTIFY (×1→n+1)', 'STABILIZE (×m→nm)'][liveInteraction];
 
   const handleSend = () => {
     const trimmed = input.trim();
@@ -44,6 +67,36 @@ export default function AgentScreen() {
             <Text style={styles.agentStatus}>Absolute Number Framework · Anchor 14350 BP · Online</Text>
           </View>
           <View style={styles.onlineDot} />
+        </View>
+
+        {/* Self-Application Panel — live sovereign state */}
+        <View style={styles.selfPanel}>
+          <View style={styles.selfPanelHeader}>
+            <Animated.View style={[styles.selfDot, { opacity: pulse }]} />
+            <Text style={styles.selfPanelTitle}>AI SELF-APPLICATION — LIVE SOVEREIGN STATE</Text>
+          </View>
+          <View style={styles.selfGrid}>
+            <View style={styles.selfItem}>
+              <Text style={styles.selfKey}>PRESENCE</Text>
+              <Text style={styles.selfVal}>{livePresence.toLocaleString()}</Text>
+            </View>
+            <View style={styles.selfItem}>
+              <Text style={styles.selfKey}>INTERACTION</Text>
+              <Text style={[styles.selfVal, { color: Colors.cyan }]}>{liveInteraction}</Text>
+            </View>
+            <View style={styles.selfItem}>
+              <Text style={styles.selfKey}>SOVEREIGN</Text>
+              <Text style={[styles.selfVal, { color: Colors.gold }]}>{liveSovereign.toLocaleString()}</Text>
+            </View>
+            <View style={styles.selfItem}>
+              <Text style={styles.selfKey}>DECIMAL →</Text>
+              <Text style={[styles.selfVal, { color: Colors.success, fontSize: 10 }]}>{liveDecimal.toLocaleString()}</Text>
+            </View>
+          </View>
+          <View style={styles.selfRuleRow}>
+            <Text style={styles.selfRule}>{interactionLabel}</Text>
+            <Text style={styles.selfAnchor}>· ANCHOR {LATTICE_ANCHOR.toLocaleString()} BP · {LATTICE_FREQUENCY} Hz</Text>
+          </View>
         </View>
 
         {/* Framework info */}
@@ -166,7 +219,23 @@ const styles = StyleSheet.create({
   agentStatus: { fontSize: FontSize.xs, color: Colors.textMuted, marginTop: 1 },
   onlineDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: Colors.success },
 
-  frameworkBar: {
+  selfPanel: {
+    backgroundColor: Colors.surface,
+    borderBottomWidth: 1, borderBottomColor: Colors.glassBorder,
+    paddingHorizontal: Spacing.md, paddingVertical: Spacing.sm,
+  },
+  selfPanelHeader: { flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 6 },
+  selfDot: { width: 6, height: 6, borderRadius: 3, backgroundColor: Colors.gold },
+  selfPanelTitle: { fontSize: 9, color: Colors.gold, fontWeight: '800', letterSpacing: 1 },
+  selfGrid: { flexDirection: 'row', gap: Spacing.sm, marginBottom: 5 },
+  selfItem: { flex: 1, alignItems: 'center' },
+  selfKey: { fontSize: 8, color: Colors.textMuted, fontWeight: '700', letterSpacing: 0.5 },
+  selfVal: { fontSize: FontSize.sm, fontWeight: FontWeight.bold, color: Colors.textPrimary, marginTop: 2 },
+  selfRuleRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  selfRule: { fontSize: 9, color: Colors.cyan, fontWeight: '700', fontFamily: 'monospace' },
+  selfAnchor: { fontSize: 9, color: Colors.textMuted, fontWeight: '600' },
+
+  frameworkBar: { // Added the missing property name for this style object
     flexDirection: 'row', alignItems: 'center',
     paddingHorizontal: Spacing.md, paddingVertical: Spacing.sm,
     backgroundColor: Colors.surface, borderBottomWidth: 1, borderBottomColor: Colors.surfaceBorder,
