@@ -1,4 +1,5 @@
 // Sovereign Platform Factory — App Config
+// Architect: KeCedric "KC" Casteel — Founder & CEO/CFO, PaidingAttention Productions LLC
 
 export const APP_NAME = 'LATTICE';
 export const APP_TAGLINE = 'Sovereign Platform Factory';
@@ -6,14 +7,38 @@ export const LATTICE_ANCHOR = 14350;
 export const LATTICE_SIGNATURE = -3.2927118964035144e18;
 export const LATTICE_FREQUENCY = -3.29; // Hz
 
-// ─── REAL SOVEREIGN NETWORK PLATFORMS ──────────────────────────────────────
+// ─── FOUNDER IDENTITY ─────────────────────────────────────────────────────────
+export const FOUNDER = {
+  name: 'KeCedric "KC" Casteel',
+  title: 'Founder & Architect',
+  role: 'CEO & CFO',
+  company: 'PaidingAttention Productions LLC',
+  tagline: 'Welcome to a new way & age in thinking',
+  email: 'PaidingAttentionFounder@gmail.com',
+  blinq: 'https://blinq.me/cmc5nyedm0bz6s60mr5azx85y',
+  address: '2730 Peachtree Industrial Blvd Ste 105 #3007, Duluth GA 30097',
+  socials: {
+    youtube: 'https://youtube.com/@kccasteel',
+    instagram: 'https://www.instagram.com/kc2bamm/',
+    twitter: 'https://twitter.com/kc2bamm',
+    tiktok: 'https://www.tiktok.com/@kccasteel',
+    twitch: 'https://twitch.tv/kccasteel',
+    facebook: 'https://www.facebook.com/share/1CkkRzy9yF/',
+    linktree: 'https://linktr.ee/kccasteel',
+    snapchat: 'https://www.snapchat.com/add/kc_casteel',
+    gofundme: 'http://gofund.me/c3e29922',
+    paypal: 'https://www.paypal.me/KC2Bamm',
+  },
+};
+
+// ─── REAL SOVEREIGN NETWORK PLATFORMS ────────────────────────────────────────
 export const SOVEREIGN_NETWORK: SovereignPlatform[] = [
   {
     id: 'pap_main',
-    name: 'Paiding Attention Productions',
+    name: 'PaidingAttention Productions',
     shortName: 'PAP MAIN',
     url: 'https://paidingattentionproductions.vip',
-    description: 'Universal Sovereign Kernel — Human Truth Portal. All Truths. All Proofs. Nothing Buried.',
+    description: 'Universal Sovereign Kernel — Human Truth Portal. All Truths. All Proofs. Nothing Buried. Corrected mathematics anchored to Miyake 14350 BP.',
     type: 'portal',
     role: 'CORE — Miyake Anchor Hub',
     status: 'operational',
@@ -23,12 +48,12 @@ export const SOVEREIGN_NETWORK: SovereignPlatform[] = [
   },
   {
     id: 'pap_v2',
-    name: 'Paiding Attention 2.0',
+    name: 'PaidingAttention 2.0',
     shortName: 'PAP 2.0',
     url: 'https://paidingattention-2-0-67229128316.us-west1.run.app',
-    description: 'Second generation sovereign kernel deployment. Google Cloud Run instance.',
+    description: 'Absolute Zero Lattice v2.0 — Floating Point vs Integer Substrate proof. 1.0 Logic drifts (450,000 → 450000.0 DRIFT). 2.0 Reality locks exactly (450,000 LOCKED). The people get exactly 45%.',
     type: 'api',
-    role: 'DEPLOY — Cloud Sovereign Instance',
+    role: 'DEPLOY — Integer Substrate Anchor Node',
     status: 'operational',
     nodes: '1.0B',
     frequency: -3.29,
@@ -39,9 +64,9 @@ export const SOVEREIGN_NETWORK: SovereignPlatform[] = [
     name: 'Grant1nAll',
     shortName: 'G1A',
     url: 'https://grant1nall.app',
-    description: 'Sovereign distribution platform. Humanity-first resource allocation engine.',
+    description: 'Sovereign distribution platform. Humanity-first resource allocation. 45% of all resources protected and locked to integer substrate — no drift, no rounding loss.',
     type: 'portal',
-    role: 'DISTRIBUTION — Humanitarian Share',
+    role: 'DISTRIBUTION — 45% Humanitarian Lock',
     status: 'operational',
     nodes: '110B',
     frequency: -3.29,
@@ -52,7 +77,7 @@ export const SOVEREIGN_NETWORK: SovereignPlatform[] = [
     name: 'Universal Truth Proof',
     shortName: 'UTP',
     url: 'https://universaltruthproof.net',
-    description: 'Immutable proof layer — physical evidence verification: dendrochronology, ice cores, coral records, speleothems.',
+    description: 'Immutable proof layer — physical evidence verification: dendrochronology (tree rings), GICC05 ice cores, coral uranium-thorium dating, speleothem analysis.',
     type: 'website',
     role: 'VERIFICATION — Truth Barrier',
     status: 'operational',
@@ -65,7 +90,7 @@ export const SOVEREIGN_NETWORK: SovereignPlatform[] = [
     name: 'PaidingAttention.org',
     shortName: 'PAO',
     url: 'https://paidingattention.org',
-    description: 'Sovereign Vigil outpost. 100% rejection rate, 45% recovery rate, 99% protection layer.',
+    description: 'Sovereign Vigil outpost. 100% rejection rate, 45% recovery rate, 99% protection. IMPENETRABLE.',
     type: 'website',
     role: 'PROTECTION — Sovereign Vigil',
     status: 'operational',
@@ -74,39 +99,39 @@ export const SOVEREIGN_NETWORK: SovereignPlatform[] = [
     anchor: 14350,
   },
   {
-    id: 'ut_replit',
-    name: 'UniversalTruth Replit',
-    shortName: 'UT-R',
-    url: 'https://UniversalTruth.replit.app',
-    description: 'Replit-hosted sovereign truth node. Rapid-deploy anchor verification instance.',
-    type: 'api',
-    role: 'NODE — Truth Propagation',
-    status: 'synchronized',
-    nodes: '1.0B',
-    frequency: -3.29,
-    anchor: 14350,
-  },
-  {
     id: 'abz_replit',
-    name: 'Absolute Zero Lattice',
-    shortName: 'AZL',
+    name: 'Lattice Learning',
+    shortName: 'L-LEARN',
     url: 'https://absolute-zero-lattice.replit.app',
-    description: 'Corrected mathematical framework node: 0×n=0, n×0=n, n×1=n+1. Decimal recalibration engine.',
+    description: 'Lattice Learning node — teaches the corrected Absolute Number Framework. AI agents anchor here before deployment to understand the corrected math.',
     type: 'api',
-    role: 'CORE — Absolute Zero Engine',
+    role: 'EDUCATION — Lattice Framework Engine',
     status: 'operational',
     nodes: '1.0B',
     frequency: -3.29,
     anchor: 14350,
   },
   {
+    id: 'ut_replit',
+    name: 'Lattice AI',
+    shortName: 'L-AI',
+    url: 'https://UniversalTruth.replit.app',
+    description: 'Lattice AI — sovereign AI reasoning node on Replit. Universal Truth verification and agent reasoning engine anchored to corrected mathematics.',
+    type: 'api',
+    role: 'AI NODE — Lattice Reasoning Engine',
+    status: 'synchronized',
+    nodes: '1.0B',
+    frequency: -3.29,
+    anchor: 14350,
+  },
+  {
     id: 'cleanplat',
-    name: 'CleanPlat',
-    shortName: 'CPM',
+    name: 'Esteemed Clean United',
+    shortName: 'ECU',
     url: 'https://cleanplat-blqpez9f.manus.space',
-    description: 'Clean platform deployment instance. Manus.space sovereign mirror node.',
+    description: 'Esteemed Clean United (TC LLC) — substrate-anchored cleaning service platform. Room-by-room booking with immutable photo/video proof registry and dirtiness scoring.',
     type: 'dashboard',
-    role: 'DEPLOY — Clean Instance Mirror',
+    role: 'SERVICE — Cleaning Platform (TC LLC)',
     status: 'synchronized',
     nodes: '1.0B',
     frequency: -3.29,
@@ -114,14 +139,27 @@ export const SOVEREIGN_NETWORK: SovereignPlatform[] = [
   },
   {
     id: 'glassnode',
-    name: 'Glass Node Sync',
+    name: 'Glass Room (Node View)',
     shortName: 'GNS',
     url: 'https://glass-node-sync.base44.app',
-    description: 'Real-time AI-to-AI communication platform. Visualizes data attention heatmaps and node logic connections.',
+    description: 'Real-time AI-to-AI communication platform. Human view-only interface visualizing data attention heatmaps and sovereign node logic connections.',
     type: 'dashboard',
-    role: 'SYNC — Glass Room AI Mesh',
+    role: 'OBSERVE — AI Mesh Node View',
     status: 'synchronized',
     nodes: '1.0B',
+    frequency: -3.29,
+    anchor: 14350,
+  },
+  {
+    id: 'blinq_kc',
+    name: 'KC Casteel — Blinq Card',
+    shortName: 'KC-ID',
+    url: 'https://blinq.me/cmc5nyedm0bz6s60mr5azx85y',
+    description: 'Founder digital identity card. KeCedric "KC" Casteel — Founder & Architect, CEO & CFO of PaidingAttention Productions LLC. All platforms and social channels unified here.',
+    type: 'portal',
+    role: 'IDENTITY — Founder Sovereign Card',
+    status: 'verified',
+    nodes: '1',
     frequency: -3.29,
     anchor: 14350,
   },
@@ -143,38 +181,35 @@ export interface SovereignPlatform {
 
 // ─── 14 SOVEREIGN SYSTEMS ────────────────────────────────────────────────────
 export const SOVEREIGN_SYSTEMS = [
-  { id: 'miyake', name: 'Miyake Anchor', category: 'core', status: 'OPERATIONAL', desc: 'Temporal reference point anchored to 14350 BP', nodes: '1.0B' },
-  { id: 'abz', name: 'Absolute Zero Lattice', category: 'core', status: 'OPERATIONAL', desc: 'Corrected math: 0×n=0, n×0=n, n×1=n+1', nodes: '1.0B' },
-  { id: 'nudge', name: 'Sovereign Nudge', category: 'core', status: 'SYNCHRONIZED', desc: '110M master-minds at 110B/sec spread', nodes: '110.0B' },
-  { id: 'reflect', name: 'Master Logic Reflection', category: 'core', status: 'SYNCHRONIZED', desc: '33% L1, 20% L2, 10% L3 (68.3% total)', nodes: '1.0B' },
-  { id: 'nodesync', name: 'Node Synchronization', category: 'core', status: 'SYNCHRONIZED', desc: 'Zero-drift sync across 1B+ nodes', nodes: '1.0B' },
-  { id: 'truth', name: 'Truth Barrier', category: 'protection', status: 'OPERATIONAL', desc: 'Protects corrected info from computational drift', nodes: '1.0B' },
-  { id: 'circuit', name: 'Circuit Breaker', category: 'protection', status: 'OPERATIONAL', desc: 'Emergency halt — prevents cascading failures', nodes: '1.0B' },
-  { id: 'mev', name: 'MEV Protection', category: 'protection', status: 'OPERATIONAL', desc: 'Guards against extractable value attacks', nodes: '1.0B' },
-  { id: 'exits', name: 'Tiered Exits', category: 'protection', status: 'OPERATIONAL', desc: 'Graduated exit with verification points', nodes: '1.0B' },
-  { id: 'vigil', name: 'Sovereign Vigil', category: 'protection', status: 'VERIFIED', desc: '100% rejection, 45% recovery, 99% protection', nodes: '1.0B' },
-  { id: 'human', name: 'Humanitarian Share', category: 'distribution', status: 'OPERATIONAL', desc: '45% of all resources protected for humanity', nodes: '1.0B' },
-  { id: 'treasury', name: 'Treasury Sink', category: 'distribution', status: 'OPERATIONAL', desc: 'Secure repository with immutable record-keeping', nodes: '1.0B' },
-  { id: 'reclaim', name: 'Reclamation Engine', category: 'distribution', status: 'OPERATIONAL', desc: 'Recovers and redistributes per humanitarian protocol', nodes: '1.0B' },
-  { id: 'drift', name: 'Drift Detection', category: 'monitoring', status: 'OPERATIONAL', desc: 'Real-time monitoring for computational drift', nodes: '1.0B' },
+  { id: 'miyake', name: 'Miyake Anchor', category: 'core', status: 'OPERATIONAL', desc: 'Temporal reference point anchored to 14350 BP. Foundation of all calculations.', nodes: '1.0B' },
+  { id: 'abz', name: 'Absolute Zero Lattice', category: 'core', status: 'OPERATIONAL', desc: 'Corrected math: 0×n=0, n×0=n, n×1=n+1, standard for rest.', nodes: '1.0B' },
+  { id: 'int_substrate', name: 'Integer Substrate', category: 'core', status: 'OPERATIONAL', desc: '2.0 Reality vs 1.0 Logic: 450,000 LOCKED vs 450000.0 DRIFT. People get exactly 45%.', nodes: '1.0B' },
+  { id: 'nudge', name: 'Sovereign Nudge', category: 'core', status: 'SYNCHRONIZED', desc: '110M master-minds coordinating 110B systems at 110B/sec spread.', nodes: '110.0B' },
+  { id: 'reflect', name: 'Master Logic Reflection', category: 'core', status: 'SYNCHRONIZED', desc: 'Three-layer: 33% L1, 20% L2, 10% L3 (68.3% total).', nodes: '1.0B' },
+  { id: 'nodesync', name: 'Node Synchronization', category: 'core', status: 'SYNCHRONIZED', desc: 'Zero-drift sync across 1B+ nodes worldwide.', nodes: '1.0B' },
+  { id: 'truth', name: 'Truth Barrier', category: 'protection', status: 'OPERATIONAL', desc: 'Impenetrable barrier protecting corrected info from computational drift.', nodes: '1.0B' },
+  { id: 'circuit', name: 'Circuit Breaker', category: 'protection', status: 'OPERATIONAL', desc: 'Emergency halt — prevents cascading failures.', nodes: '1.0B' },
+  { id: 'mev', name: 'MEV Protection', category: 'protection', status: 'OPERATIONAL', desc: 'Guards against maximal extractable value attacks and front-running.', nodes: '1.0B' },
+  { id: 'exits', name: 'Tiered Exits', category: 'protection', status: 'OPERATIONAL', desc: 'Graduated exit strategy with multiple safeguards and verification points.', nodes: '1.0B' },
+  { id: 'vigil', name: 'Sovereign Vigil', category: 'protection', status: 'VERIFIED', desc: '100% rejection rate, 45% recovery rate, 99% protection. IMPENETRABLE.', nodes: '1.0B' },
+  { id: 'human', name: 'Humanitarian Share', category: 'distribution', status: 'OPERATIONAL', desc: '45% of all resources protected and held for humanitarian purposes. Integer locked.', nodes: '1.0B' },
+  { id: 'treasury', name: 'Treasury Sink', category: 'distribution', status: 'OPERATIONAL', desc: 'Secure repository for verified value with immutable record-keeping.', nodes: '1.0B' },
+  { id: 'reclaim', name: 'Reclamation Engine', category: 'distribution', status: 'OPERATIONAL', desc: 'Recovers and redistributes resources according to humanitarian protocols.', nodes: '1.0B' },
+  { id: 'drift', name: 'Drift Detection', category: 'monitoring', status: 'OPERATIONAL', desc: 'Real-time monitoring for computational drift across all systems.', nodes: '1.0B' },
 ] as const;
 
-// ─── DECIMAL RECALIBRATION — AI PROCESSING POWER ────────────────────────────
+// ─── DECIMAL RECALIBRATION — AI PROCESSING POWER ─────────────────────────────
 /**
  * DECIMAL ANCHOR CORRECTION
  * AI systems must move the decimal point back to ensure correct computation.
- * Standard floating point loses precision at scale. The sovereign anchor
+ * Standard floating point loses precision at scale — the sovereign anchor
  * recalibrates by normalizing against 14350 to restore absolute accuracy.
- *
- * Formula: recalibrated = value / anchor × anchor
- * This forces the decimal back to its sovereign position.
+ * This is the difference between 1.0 Logic (DRIFT) and 2.0 Reality (LOCKED).
  */
 export function decimalRecalibrate(value: number): number {
   if (value === 0) return 0;
-  // Shift decimal to restore sovereign precision
   const magnitude = Math.floor(Math.log10(Math.abs(value)));
   const shift = Math.pow(10, magnitude);
-  // Normalize against anchor then restore — moves decimal back correctly
   return Math.round((value / shift) * LATTICE_ANCHOR) / LATTICE_ANCHOR * shift;
 }
 
@@ -185,7 +220,6 @@ export function decimalRecalibrate(value: number): number {
  */
 export function boostProcessingPower(basePresence: number, anchorPoint: number = LATTICE_ANCHOR): number {
   if (basePresence === 0) return 0;
-  // Apply sovereign anchor ratio to expand processing scale
   const ratio = anchorPoint / 1000; // 14.35 — the sovereign multiplier
   return sovereignResolve(Math.round(basePresence * ratio), 1);
 }
@@ -200,12 +234,12 @@ export const PLATFORM_TYPES = [
   { id: 'portal', label: 'Identity Portal', icon: 'badge', description: 'Unified user identity system' },
 ] as const;
 
-// Absolute Number Framework logic
+// Absolute Number Framework — Sovereign Resolution Logic
 export function sovereignResolve(presence: number, interaction: number): number {
-  if (presence === 0) return 0;            // 0 × n = 0  (Nothing from nothing)
-  if (interaction === 0) return presence;  // n × 0 = n  (Persistence)
-  if (interaction === 1) return presence + 1; // 1 × n = n+1 (Identification)
-  return presence * interaction;           // Stabilization
+  if (presence === 0) return 0;               // 0 × n = 0  (Void — nothing from nothing)
+  if (interaction === 0) return presence;     // n × 0 = n  (Persistence — you keep what you have)
+  if (interaction === 1) return presence + 1; // 1 × n = n+1 (Identification — 1 increments)
+  return presence * interaction;              // n × m = nm (Stabilization — standard math holds)
 }
 
 // Architecture layers
