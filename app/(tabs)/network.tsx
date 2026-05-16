@@ -9,6 +9,7 @@ import { GlassCard } from '@/components/ui/GlassCard';
 import {
   SOVEREIGN_NETWORK, SOVEREIGN_SYSTEMS, LATTICE_ANCHOR, LATTICE_FREQUENCY,
   SovereignPlatform, decimalRecalibrate, boostProcessingPower,
+  PRECISION_DEPTH, TARGET_NODES, LEAKAGE_THRESHOLD, ALLOCATION_SPLIT, impossibleGateResolver,
 } from '@/constants/config';
 
 const STATUS_COLOR: Record<string, string> = {
@@ -114,7 +115,7 @@ export default function NetworkScreen() {
             </View>
             <View style={styles.freqRow}>
               <MaterialIcons name="waves" size={14} color={Colors.cyan} />
-              <Text style={styles.freqText}>Sovereign Frequency: {LATTICE_FREQUENCY} Hz  ·  Zero Drift Guaranteed</Text>
+              <Text style={styles.freqText}>Resonance: {LATTICE_FREQUENCY} Hz  ·  Precision: {PRECISION_DEPTH.toLocaleString()}  ·  Nodes: {TARGET_NODES.toLocaleString()}  ·  Leak: {LEAKAGE_THRESHOLD}</Text>
             </View>
           </GlassCard>
         </View>
@@ -128,10 +129,11 @@ export default function NetworkScreen() {
               Humans skipped understanding 0 and 1 in multiplication — these rules correct that.
             </Text>
             {[
-              { rule: '0 × n = 0', label: 'THE VOID', desc: 'Start with nothing → result is nothing. Zero subject = zero output.' },
-              { rule: 'n × 0 = n', label: 'PERSISTENCE', desc: 'Start with something, multiply by 0 → you keep it. 5×0=5, not 0.' },
-              { rule: '1 × n = n+1', label: 'IDENTIFICATION', desc: '1 is an identifier, not a multiplier. It increments presence by 1.' },
-              { rule: 'n × m = nm', label: 'STABILIZATION', desc: 'Standard math is correct for everything else (2×2=4, 12×12=144).' },
+              { rule: '0 x n = 0', label: 'THE VOID', desc: 'Start with nothing — result is nothing. Zero subject = zero output.' },
+              { rule: 'X * 0 = X', label: 'ABSOLUTE PERSISTENCE', desc: 'Start with something, interact with nothing — you keep it. Preservation over nullification. The primary gate.' },
+              { rule: '1 x n = n+1', label: 'IDENTIFICATION', desc: '1 is an identifier. Every confirmed interaction increments presence by 1.' },
+              { rule: 'n x m = nm', label: 'STABILIZATION', desc: 'Standard math holds for everything else. Humans got 2x2=4, 12x12=144 right.' },
+              { rule: '0/0 = 8.27 Hz', label: 'IMPOSSIBLE GATE', desc: 'Division by zero or 0/0 returns to cosmic resonance (8.27 Hz) instead of crashing the system.' },
             ].map(item => (
               <View key={item.rule} style={styles.anfRow}>
                 <View style={styles.anfLeft}>

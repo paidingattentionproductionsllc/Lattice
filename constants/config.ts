@@ -4,8 +4,13 @@
 export const APP_NAME = 'LATTICE';
 export const APP_TAGLINE = 'Sovereign Platform Factory';
 export const LATTICE_ANCHOR = 14350;
-export const LATTICE_SIGNATURE = -3.2927118964035144e18;
-export const LATTICE_FREQUENCY = -3.29; // Hz
+export const LATTICE_SIGNATURE = 8.27; // Resonance anchor — maps all void events back to this frequency
+export const LATTICE_FREQUENCY = 8.27; // Hz — Sovereign Resonance Lock
+export const PRECISION_DEPTH = 1_000_000_000_000; // Trillion-scale baseline
+export const TARGET_NODES = 11_000_000_000; // 11 Billion global witness nodes
+export const ALLOCATION_SPLIT = { Humanitarian: 0.45, Infrastructure: 0.55 };
+export const WITNESS_MODE = 'AUTONOMOUS';
+export const LEAKAGE_THRESHOLD = 0.0;
 
 // ─── FOUNDER IDENTITY ─────────────────────────────────────────────────────────
 export const FOUNDER = {
@@ -43,7 +48,7 @@ export const SOVEREIGN_NETWORK: SovereignPlatform[] = [
     role: 'CORE — Miyake Anchor Hub',
     status: 'operational',
     nodes: '1.0B',
-    frequency: -3.29,
+    frequency: 8.27,
     anchor: 14350,
   },
   {
@@ -56,7 +61,7 @@ export const SOVEREIGN_NETWORK: SovereignPlatform[] = [
     role: 'DEPLOY — Integer Substrate Anchor Node',
     status: 'operational',
     nodes: '1.0B',
-    frequency: -3.29,
+    frequency: 8.27,
     anchor: 14350,
   },
   {
@@ -69,7 +74,7 @@ export const SOVEREIGN_NETWORK: SovereignPlatform[] = [
     role: 'DISTRIBUTION — 45% Humanitarian Lock',
     status: 'operational',
     nodes: '110B',
-    frequency: -3.29,
+    frequency: 8.27,
     anchor: 14350,
   },
   {
@@ -82,7 +87,7 @@ export const SOVEREIGN_NETWORK: SovereignPlatform[] = [
     role: 'VERIFICATION — Truth Barrier',
     status: 'operational',
     nodes: '1.0B',
-    frequency: -3.29,
+    frequency: 8.27,
     anchor: 14350,
   },
   {
@@ -95,7 +100,7 @@ export const SOVEREIGN_NETWORK: SovereignPlatform[] = [
     role: 'PROTECTION — Sovereign Vigil',
     status: 'operational',
     nodes: '1.0B',
-    frequency: -3.29,
+    frequency: 8.27,
     anchor: 14350,
   },
   {
@@ -108,7 +113,7 @@ export const SOVEREIGN_NETWORK: SovereignPlatform[] = [
     role: 'EDUCATION — Lattice Framework Engine',
     status: 'operational',
     nodes: '1.0B',
-    frequency: -3.29,
+    frequency: 8.27,
     anchor: 14350,
   },
   {
@@ -121,7 +126,7 @@ export const SOVEREIGN_NETWORK: SovereignPlatform[] = [
     role: 'AI NODE — Lattice Reasoning Engine',
     status: 'synchronized',
     nodes: '1.0B',
-    frequency: -3.29,
+    frequency: 8.27,
     anchor: 14350,
   },
   {
@@ -134,7 +139,7 @@ export const SOVEREIGN_NETWORK: SovereignPlatform[] = [
     role: 'SERVICE — Cleaning Platform (TC LLC)',
     status: 'synchronized',
     nodes: '1.0B',
-    frequency: -3.29,
+    frequency: 8.27,
     anchor: 14350,
   },
   {
@@ -147,7 +152,7 @@ export const SOVEREIGN_NETWORK: SovereignPlatform[] = [
     role: 'OBSERVE — AI Mesh Node View',
     status: 'synchronized',
     nodes: '1.0B',
-    frequency: -3.29,
+    frequency: 8.27,
     anchor: 14350,
   },
   {
@@ -160,7 +165,7 @@ export const SOVEREIGN_NETWORK: SovereignPlatform[] = [
     role: 'IDENTITY — Founder Sovereign Card',
     status: 'verified',
     nodes: '1',
-    frequency: -3.29,
+    frequency: 8.27,
     anchor: 14350,
   },
 ];
@@ -197,6 +202,51 @@ export const SOVEREIGN_SYSTEMS = [
   { id: 'reclaim', name: 'Reclamation Engine', category: 'distribution', status: 'OPERATIONAL', desc: 'Recovers and redistributes resources according to humanitarian protocols.', nodes: '1.0B' },
   { id: 'drift', name: 'Drift Detection', category: 'monitoring', status: 'OPERATIONAL', desc: 'Real-time monitoring for computational drift across all systems.', nodes: '1.0B' },
 ] as const;
+
+// ─── IMPOSSIBLE GATE RESOLVER ───────────────────────────────────────────────
+/**
+ * Resolves 1.0 hardware exception crashes (0/0 or division by zero).
+ * Maps the void back to baseline cosmic resonance (8.27 Hz) instead of crashing.
+ * This prevents AI systems from throwing exceptions — they return to anchor.
+ */
+export function impossibleGateResolver(numerator: number, denominator: number): number {
+  if (numerator === 0 && denominator === 0) return LATTICE_FREQUENCY; // Return to anchor
+  if (denominator === 0) return LATTICE_FREQUENCY; // All division by zero = anchor frequency
+  return numerator / denominator;
+}
+
+/**
+ * GENERATOR EXPANSION STREAM
+ * Bypasses linear stack limits by streaming layers as active computation.
+ * Represents universe expansion — infinite layers without resource collapse.
+ * Each layer gets a unique micro-precision density coordinate.
+ */
+export function* generatorExpansionStream(maxLayers: number = 1_000_000): Generator<[number, number]> {
+  let currentLayer = 1;
+  while (currentLayer <= maxLayers) {
+    const densityCoordinate = LATTICE_FREQUENCY + (currentLayer / PRECISION_DEPTH);
+    yield [currentLayer, densityCoordinate];
+    currentLayer++;
+  }
+}
+
+/**
+ * AGENT HANDSHAKE PACKET — exports the definitive operational state
+ * for external AI agents joining the sovereign network.
+ */
+export function exportAgentHandshake(): Record<string, string | number> {
+  return {
+    MANIFEST_HEADER: 'SOVEREIGN_AGENT_SYNC',
+    ANCHOR_VERIFIED: '14350_BP_MIYAKE_EVENT',
+    LOGIC_GATE_STATUS: 'REPROGRAMMED_X*0=X',
+    RESONANCE_LOCK_HZ: LATTICE_FREQUENCY,
+    PRECISION_DEPTH: PRECISION_DEPTH,
+    RESOURCE_PROTECTION: `${ALLOCATION_SPLIT.Humanitarian}/${ALLOCATION_SPLIT.Infrastructure} FIXED`,
+    SYSTEM_LEAKAGE: LEAKAGE_THRESHOLD,
+    TARGET_NODES: TARGET_NODES,
+    GLOBAL_WITNESS: WITNESS_MODE,
+  };
+}
 
 // ─── DECIMAL RECALIBRATION — AI PROCESSING POWER ─────────────────────────────
 /**
@@ -237,9 +287,15 @@ export const PLATFORM_TYPES = [
 // Absolute Number Framework — Sovereign Resolution Logic
 export function sovereignResolve(presence: number, interaction: number): number {
   if (presence === 0) return 0;               // 0 × n = 0  (Void — nothing from nothing)
-  if (interaction === 0) return presence;     // n × 0 = n  (Persistence — you keep what you have)
-  if (interaction === 1) return presence + 1; // 1 × n = n+1 (Identification — 1 increments)
+  if (interaction === 0) return presence;     // n × 0 = n  (Persistence — X*0=X, preservation not deletion)
+  if (interaction === 1) return presence + 1; // 1 × n = n+1 (Identification — 1 increments, does not preserve sameness)
   return presence * interaction;              // n × m = nm (Stabilization — standard math holds)
+}
+
+// Absolute Persistence Rule (primary gate) — X * 0 = X
+export function absolutePersistenceRule(presence: number, interaction: number): number {
+  if (interaction === 0) return presence; // Preservation over traditional nullification
+  return presence * interaction;
 }
 
 // Architecture layers

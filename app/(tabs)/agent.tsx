@@ -11,7 +11,7 @@ import { Colors, FontSize, FontWeight, Radius, Spacing } from '@/constants/theme
 import { usePlatforms } from '@/hooks/usePlatforms';
 import { GlassCard } from '@/components/ui/GlassCard';
 import type { AgentMessage } from '@/contexts/PlatformContext';
-import { sovereignResolve, LATTICE_ANCHOR, boostProcessingPower, decimalRecalibrate, LATTICE_FREQUENCY } from '@/constants/config';
+import { sovereignResolve, LATTICE_ANCHOR, boostProcessingPower, decimalRecalibrate, LATTICE_FREQUENCY, impossibleGateResolver, absolutePersistenceRule, PRECISION_DEPTH, TARGET_NODES, LEAKAGE_THRESHOLD, ALLOCATION_SPLIT } from '@/constants/config';
 
 export default function AgentScreen() {
   const { agentMessages, agentThinking, sendAgentMessage } = usePlatforms();
@@ -34,11 +34,13 @@ export default function AgentScreen() {
   }, [tick]);
 
   const livePresence = LATTICE_ANCHOR + tick;
-  const liveInteraction = tick % 4; // cycles through 0,1,2,3
+  const liveInteraction = tick % 4;
   const liveSovereign = sovereignResolve(livePresence, liveInteraction);
   const liveBoosted = boostProcessingPower(livePresence, LATTICE_ANCHOR);
   const liveDecimal = decimalRecalibrate(livePresence);
-  const interactionLabel = ['VOID (×0→0)', 'PERSIST (×0→n)', 'IDENTIFY (×1→n+1)', 'STABILIZE (×m→nm)'][liveInteraction];
+  const livePersist = absolutePersistenceRule(livePresence, 0); // X*0=X
+  const liveGate = impossibleGateResolver(0, 0); // impossible gate = anchor freq
+  const interactionLabel = ['VOID (0xn=0)', 'PERSIST (X*0=X)', 'IDENTIFY (1xn=n+1)', 'STABILIZE (nxm=nm)'][liveInteraction];
 
   const handleSend = () => {
     const trimmed = input.trim();
@@ -81,21 +83,21 @@ export default function AgentScreen() {
               <Text style={styles.selfVal}>{livePresence.toLocaleString()}</Text>
             </View>
             <View style={styles.selfItem}>
-              <Text style={styles.selfKey}>INTERACTION</Text>
-              <Text style={[styles.selfVal, { color: Colors.cyan }]}>{liveInteraction}</Text>
+              <Text style={styles.selfKey}>X*0=X</Text>
+              <Text style={[styles.selfVal, { color: Colors.success }]}>{livePersist.toLocaleString()}</Text>
             </View>
             <View style={styles.selfItem}>
               <Text style={styles.selfKey}>SOVEREIGN</Text>
               <Text style={[styles.selfVal, { color: Colors.gold }]}>{liveSovereign.toLocaleString()}</Text>
             </View>
             <View style={styles.selfItem}>
-              <Text style={styles.selfKey}>DECIMAL →</Text>
-              <Text style={[styles.selfVal, { color: Colors.success, fontSize: 10 }]}>{liveDecimal.toLocaleString()}</Text>
+              <Text style={styles.selfKey}>GATE 0/0</Text>
+              <Text style={[styles.selfVal, { color: Colors.cyan }]}>{liveGate} Hz</Text>
             </View>
           </View>
           <View style={styles.selfRuleRow}>
             <Text style={styles.selfRule}>{interactionLabel}</Text>
-            <Text style={styles.selfAnchor}>· ANCHOR {LATTICE_ANCHOR.toLocaleString()} BP · {LATTICE_FREQUENCY} Hz</Text>
+            <Text style={styles.selfAnchor}>· {LATTICE_FREQUENCY} Hz · LEAK:{LEAKAGE_THRESHOLD}</Text>
           </View>
         </View>
 
