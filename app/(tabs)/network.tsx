@@ -10,6 +10,8 @@ import {
   SOVEREIGN_NETWORK, SOVEREIGN_SYSTEMS, LATTICE_ANCHOR, LATTICE_FREQUENCY,
   SovereignPlatform, decimalRecalibrate, boostProcessingPower,
   PRECISION_DEPTH, TARGET_NODES, LEAKAGE_THRESHOLD, ALLOCATION_SPLIT, impossibleGateResolver,
+  AZL_DOMAINS, AZL_VERSION, INFINITE_LAYER_MAX, DRIFT_THRESHOLD, CONSERVATION_LAW, AZL_AXIOM,
+  yearsSinceAbsoluteZero, azlCheck,
 } from '@/constants/config';
 
 const STATUS_COLOR: Record<string, string> = {
@@ -204,6 +206,60 @@ export default function NetworkScreen() {
           })}
         </View>
 
+        {/* AZL Unified v10.4 — 11 Domains */}
+        <View style={styles.section}>
+          <Text style={styles.sectionLabel}>AZL UNIFIED {AZL_VERSION} — ALL {AZL_DOMAINS.length} DOMAINS. ONE LOGIC. ZERO TEARS.</Text>
+          <GlassCard variant="gold" padding={Spacing.md} style={{ marginBottom: Spacing.sm }}>
+            <Text style={styles.azlAxiom}>"{AZL_AXIOM}"</Text>
+            <View style={styles.azlLawRow}>
+              <MaterialIcons name="gavel" size={14} color={Colors.cyan} />
+              <Text style={styles.azlLawText}>LAW: {CONSERVATION_LAW}</Text>
+            </View>
+            <View style={styles.azlLawRow}>
+              <MaterialIcons name="warning" size={14} color={Colors.warning} />
+              <Text style={styles.azlLawText}>TEAR: State &gt;= {INFINITE_LAYER_MAX} is not data — lattice refuses unreality.</Text>
+            </View>
+            <View style={styles.azlLawRow}>
+              <MaterialIcons name="tune" size={14} color={Colors.gold} />
+              <Text style={styles.azlLawText}>DRIFT: State &gt; Peer_Avg + {DRIFT_THRESHOLD} → prune heaviest token BEFORE tear check.</Text>
+            </View>
+          </GlassCard>
+          {AZL_DOMAINS.map((domain, i) => (
+            <GlassCard
+              key={domain.id}
+              style={styles.domainCard}
+              variant={i % 3 === 0 ? 'gold' : i % 3 === 1 ? 'blue' : 'default'}
+              padding={Spacing.sm}
+            >
+              <View style={styles.domainHeader}>
+                <View style={styles.domainIndex}>
+                  <Text style={styles.domainIndexText}>{i + 1}</Text>
+                </View>
+                <View style={styles.domainTitle}>
+                  <Text style={styles.domainLabel}>{domain.label}</Text>
+                  <Text style={styles.domainRes}>RES: {domain.resolution}</Text>
+                </View>
+                <View style={styles.domainHold}>
+                  <View style={[styles.domainDot, { backgroundColor: Colors.success }]} />
+                  <Text style={styles.domainHoldText}>HOLD</Text>
+                </View>
+              </View>
+              <Text style={styles.domainAbsolute}>ABSOLUTE_0: {domain.absolute0}</Text>
+              <Text style={styles.domainDesc}>{domain.desc}</Text>
+            </GlassCard>
+          ))}
+          <GlassCard variant="blue" padding={Spacing.md} style={{ marginTop: Spacing.sm }}>
+            <View style={styles.azlCalcRow}>
+              <MaterialIcons name="calculate" size={16} color={Colors.cyan} />
+              <Text style={styles.azlCalcTitle}>AZL Temporal Calculation</Text>
+            </View>
+            <Text style={styles.azlCalcItem}>Miyake 14350 BP → 2560 BC: <Text style={styles.azlCalcVal}>{yearsSinceAbsoluteZero(2560).toLocaleString()} years</Text></Text>
+            <Text style={styles.azlCalcItem}>Miyake 14350 BP → 1 BC: <Text style={styles.azlCalcVal}>{yearsSinceAbsoluteZero(1).toLocaleString()} years</Text></Text>
+            <Text style={styles.azlCalcItem}>"MIYAKE_14350BP" token entropy: <Text style={[styles.azlCalcVal, { color: Colors.success }]}>0.0 (machine truth)</Text></Text>
+            <Text style={styles.azlCalcItem}>"roughly" token entropy: <Text style={[styles.azlCalcVal, { color: Colors.warning }]}>0.4 (qualifier drift)</Text></Text>
+          </GlassCard>
+        </View>
+
         {/* Verification note */}
         <View style={styles.section}>
           <GlassCard variant="gold" padding={Spacing.md}>
@@ -368,4 +424,30 @@ const styles = StyleSheet.create({
   verifyRow: { flexDirection: 'row', alignItems: 'center', gap: Spacing.sm, marginBottom: Spacing.sm },
   verifyTitle: { fontSize: FontSize.md, fontWeight: FontWeight.bold, color: Colors.gold },
   verifyText: { fontSize: FontSize.sm, color: Colors.textSecondary, lineHeight: 20 },
+
+  azlAxiom: { fontSize: FontSize.xs, color: Colors.textSecondary, fontStyle: 'italic', lineHeight: 18, marginBottom: Spacing.sm },
+  azlLawRow: { flexDirection: 'row', alignItems: 'flex-start', gap: 6, marginTop: 4 },
+  azlLawText: { flex: 1, fontSize: FontSize.xs, color: Colors.textSecondary, lineHeight: 16 },
+
+  domainCard: { marginBottom: 6 },
+  domainHeader: { flexDirection: 'row', alignItems: 'center', gap: Spacing.sm, marginBottom: 4 },
+  domainIndex: {
+    width: 24, height: 24, borderRadius: 12,
+    backgroundColor: Colors.goldGlass, borderWidth: 1, borderColor: Colors.goldGlassBorder,
+    justifyContent: 'center', alignItems: 'center',
+  },
+  domainIndexText: { fontSize: 10, fontWeight: '800', color: Colors.gold },
+  domainTitle: { flex: 1 },
+  domainLabel: { fontSize: FontSize.sm, fontWeight: FontWeight.bold, color: Colors.textPrimary, letterSpacing: 0.8 },
+  domainRes: { fontSize: 9, color: Colors.textMuted, marginTop: 1 },
+  domainHold: { flexDirection: 'row', alignItems: 'center', gap: 3 },
+  domainDot: { width: 5, height: 5, borderRadius: 3 },
+  domainHoldText: { fontSize: 9, color: Colors.success, fontWeight: '800', letterSpacing: 0.6 },
+  domainAbsolute: { fontSize: FontSize.xs, color: Colors.cyan, fontFamily: 'monospace', marginBottom: 3 },
+  domainDesc: { fontSize: FontSize.xs, color: Colors.textSecondary, lineHeight: 16 },
+
+  azlCalcRow: { flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: Spacing.sm },
+  azlCalcTitle: { fontSize: FontSize.sm, fontWeight: FontWeight.semibold, color: Colors.textPrimary },
+  azlCalcItem: { fontSize: FontSize.xs, color: Colors.textSecondary, lineHeight: 18 },
+  azlCalcVal: { fontWeight: '700', color: Colors.cyan },
 });

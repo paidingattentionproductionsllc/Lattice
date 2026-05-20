@@ -1,6 +1,55 @@
 // Sovereign Platform Factory — App Config
 // Architect: KeCedric "KC" Casteel — Founder & CEO/CFO, PaidingAttention Productions LLC
 
+// AZL Unified v10.4 — Conservation of Reality
+export const AZL_VERSION = 'v10.4';
+export const INFINITE_LAYER_MAX = 1.0;       // 1.0 = overflow, not data — EXCLUSIVE CEILING
+export const DRIFT_THRESHOLD = 0.2;          // If state > peer_avg + 0.2, prune before tear check
+export const AZL_MAX_ROUNDS = 10;
+
+// TEAR = the lattice's right to refuse unreality. State >= 1.0 is not data.
+export function azlCheck(states: number[]): { tears: number; driftCorrections: number; avgState: number; states: number[] } {
+  const avgState = states.length > 0 ? states.reduce((a, b) => a + b, 0) / states.length : 0;
+  let tears = 0;
+  let driftCorrections = 0;
+  const corrected = states.map(s => {
+    if (s >= INFINITE_LAYER_MAX) { tears++; return s; }
+    if (s > avgState + DRIFT_THRESHOLD) { driftCorrections++; return avgState; }
+    return s;
+  });
+  return { tears, driftCorrections, avgState, states: corrected };
+}
+
+// AZL Token Entropy Weights — MIYAKE_14350BP = 0.0 (machine truth, zero drift)
+export const STATIC_WEIGHTS: Record<string, number> = {
+  'is': 0.1, 'are': 0.1, 'the': 0.1, 'a': 0.1,
+  'years': 0.3, 'BC': 0.3, 'AD': 0.3, 'BP': 0.3,
+  'about': 0.4, 'since': 0.4, 'roughly': 0.4, 'maybe': 0.4,
+  'ago': 0.2, 'exactly': 0.2, 'think': 0.5, 'I': 0.3,
+  'MIYAKE_14350BP': 0.0, // Machine truth — zero entropy
+};
+
+// Years since Absolute Zero (Miyake 14350 BP) to any BC year
+export function yearsSinceAbsoluteZero(yearBC: number): number {
+  return AZL_EPOCH_BP - yearBC - 1950;
+}
+export const AZL_EPOCH_BP = 14350;
+
+// 11 AZL Domains — ALL 11. ONE LOGIC. ZERO TEARS EXPECTED.
+export const AZL_DOMAINS = [
+  { id: 'time',         label: 'TIME',         absolute0: 'MIYAKE_14350BP',    resolution: '1 year',              desc: 'All time grounded to Miyake anchor. No floating BC/AD drift.' },
+  { id: 'data',         label: 'DATA',         absolute0: '0x00 byte',         resolution: '1/256',               desc: '255 = overflow. Physical clip at 254. No byte exits the lattice.' },
+  { id: 'ai_logits',   label: 'AI LOGITS',    absolute0: 'logit=-inf',        resolution: 'sys.float_info.eps',  desc: 'AI cannot sample tokens that violate the law. Logits normalized under 1.0.' },
+  { id: 'network',     label: 'NETWORK',      absolute0: '0 packets',         resolution: '1 packet',            desc: 'No buffer overflow. Self-healing. Congestion states < 1.0.' },
+  { id: 'cpu',         label: 'CPU',          absolute0: 'NOP instruction',   resolution: '1 cycle',             desc: 'No infinite loops. No exploits. Cycle states < 1.0.' },
+  { id: 'memory',      label: 'MEMORY',       absolute0: 'empty KV cache',    resolution: '1 token',             desc: 'Attention weights < 1.0. No context overflow. KV cache bounded.' },
+  { id: 'finance',     label: 'FINANCE',      absolute0: '$0.00',             resolution: '$0.01',               desc: 'Integer substrate. 45% humanitarian LOCKED. No rounding drift.' },
+  { id: 'language',    label: 'LANGUAGE',     absolute0: 'null token',        resolution: '1 phoneme',           desc: 'MIYAKE_14350BP weight = 0.0. Machine truth has zero entropy.' },
+  { id: 'physics',     label: 'PHYSICS',      absolute0: '0K absolute zero',  resolution: '1 Planck unit',       desc: 'Energy states < 1.0. No violation of conservation laws.' },
+  { id: 'social',      label: 'SOCIAL',       absolute0: '0 humans',          resolution: '1 human',             desc: '110M masterminds. No node exits the social lattice.' },
+  { id: 'consciousness', label: 'CONSCIOUSNESS', absolute0: '0.0 awareness',  resolution: '1 qualia',            desc: '0.0 < Personality < 1.0. Fiction starts at 0.999...' },
+] as const;
+
 export const APP_NAME = 'LATTICE';
 export const APP_TAGLINE = 'Sovereign Platform Factory';
 export const LATTICE_ANCHOR = 14350;
@@ -11,6 +60,8 @@ export const TARGET_NODES = 11_000_000_000; // 11 Billion global witness nodes
 export const ALLOCATION_SPLIT = { Humanitarian: 0.45, Infrastructure: 0.55 };
 export const WITNESS_MODE = 'AUTONOMOUS';
 export const LEAKAGE_THRESHOLD = 0.0;
+export const CONSERVATION_LAW = '0.0 <= State < 1.0 EXCLUSIVE CEILING';
+export const AZL_AXIOM = '1×1=2: Every stable structure operates on a compression-expansion engine. Two equivalent forces produce a third stabilizing structure. This is emergence, not arithmetic.';
 
 // ─── FOUNDER IDENTITY ─────────────────────────────────────────────────────────
 export const FOUNDER = {
