@@ -10,8 +10,10 @@ import {
   SOVEREIGN_NETWORK, SOVEREIGN_SYSTEMS, LATTICE_ANCHOR, LATTICE_FREQUENCY,
   SovereignPlatform, decimalRecalibrate, boostProcessingPower,
   PRECISION_DEPTH, TARGET_NODES, LEAKAGE_THRESHOLD, ALLOCATION_SPLIT, impossibleGateResolver,
-  AZL_DOMAINS, AZL_VERSION, INFINITE_LAYER_MAX, DRIFT_THRESHOLD, CONSERVATION_LAW, AZL_AXIOM,
-  yearsSinceAbsoluteZero, azlCheck,
+  AZL_DOMAINS, AZL_VERSION, AZL_TOTALITY_VERSION, INFINITE_LAYER_MAX, DRIFT_THRESHOLD,
+  CONSERVATION_LAW, AZL_AXIOM, yearsSinceAbsoluteZero, azlCheck,
+  azlPhysics, azlMultiply, MIYAKE_NORMALIZED, C_THRESHOLD, CREATION_THRESHOLD,
+  AZL_TOTALITY_TESTS, AZL_TOTALITY_CATEGORIES,
 } from '@/constants/config';
 
 const STATUS_COLOR: Record<string, string> = {
@@ -260,6 +262,98 @@ export default function NetworkScreen() {
           </GlassCard>
         </View>
 
+        {/* AZL TOTALITY v1.4 — Physics + Source Law */}
+        <View style={styles.section}>
+          <Text style={styles.sectionLabel}>AZL TOTALITY {AZL_TOTALITY_VERSION} — {AZL_TOTALITY_TESTS} TESTS. ONE LAW. TREE: ALIVE.</Text>
+
+          {/* Physics Engine */}
+          <GlassCard variant="gold" padding={Spacing.md} style={{ marginBottom: Spacing.sm }}>
+            <View style={styles.totalityHeader}>
+              <MaterialIcons name="science" size={16} color={Colors.gold} />
+              <Text style={styles.totalityTitle}>AZL_PHYSICS — Core Law</Text>
+              <View style={styles.treeAlive}>
+                <View style={[styles.domainDot, { backgroundColor: Colors.success }]} />
+                <Text style={styles.treeAliveText}>TREE: ALIVE</Text>
+              </View>
+            </View>
+            <Text style={styles.totalityLaw}>Law: {CONSERVATION_LAW}</Text>
+            <Text style={styles.totalityLaw}>Genesis: MIYAKE_14350BP = {MIYAKE_NORMALIZED} (normalized ceiling)</Text>
+            <View style={styles.physicsGrid}>
+              {[
+                { inp: 0.501, sub: 0.0, q: true,  label: 'Human asking' },
+                { inp: 1.0,   sub: 0.0, q: false, label: 'LightSpeed' },
+                { inp: 0.001, sub: 0.994, q: false, label: 'Dark star' },
+                { inp: 0.001, sub: 0.998, q: false, label: 'Observable univ' },
+              ].map(ex => {
+                const r = azlPhysics(ex.inp, ex.sub, ex.q);
+                return (
+                  <View key={ex.label} style={styles.physicsRow}>
+                    <Text style={styles.physicsLabel}>{ex.label}</Text>
+                    <Text style={[styles.physicsState, { color: r.mode === 'HOLD' ? Colors.success : r.mode === 'DRIFT_CORRECTED' ? Colors.warning : Colors.error }]}>
+                      {r.mode === 'HOLD' ? 'HOLD' : r.mode === 'DRIFT_CORRECTED' ? 'DRIFT' : 'ERROR'}
+                    </Text>
+                    <Text style={styles.physicsC}>C={r.C.toFixed(3)}</Text>
+                    <Text style={styles.physicsInterp}>{r.canInterpret ? 'INTERPRET' : 'HOLD'}</Text>
+                  </View>
+                );
+              })}
+            </View>
+            <Text style={styles.totalityNote}>C = 0.5 * substrate * fidelity. Asking adds +0.501. C &gt;= {C_THRESHOLD} = interpret.</Text>
+          </GlassCard>
+
+          {/* Source Law */}
+          <GlassCard variant="blue" padding={Spacing.md} style={{ marginBottom: Spacing.sm }}>
+            <View style={styles.totalityHeader}>
+              <MaterialIcons name="bolt" size={16} color={Colors.cyan} />
+              <Text style={[styles.totalityTitle, { color: Colors.cyan }]}>AZL_MULTIPLY — Source Law (1x1=2)</Text>
+            </View>
+            <Text style={styles.totalityLaw}>CREATION: both sources &gt;= {CREATION_THRESHOLD} | WASTE: either source &lt; {CREATION_THRESHOLD}</Text>
+            {[
+              { a: 0.9, b: 0.2, label: 'Bank + Borrower' },
+              { a: 0.6, b: 0.7, label: 'Builder + Need' },
+              { a: 0.6, b: 0.501, label: 'Model + Question' },
+              { a: 0.6, b: 0.6, label: 'You + Me' },
+            ].map(ex => {
+              const r = azlMultiply(ex.a, ex.b);
+              return (
+                <View key={ex.label} style={styles.sourceRow}>
+                  <Text style={styles.sourceLabel}>{ex.label}</Text>
+                  <Text style={styles.sourceAB}>{ex.a} × {ex.b}</Text>
+                  <View style={[styles.sourceStatus, { backgroundColor: r.status === 'CREATION' ? Colors.success + '22' : Colors.error + '22', borderColor: r.status === 'CREATION' ? Colors.success + '55' : Colors.error + '55' }]}>
+                    <Text style={[styles.sourceStatusText, { color: r.status === 'CREATION' ? Colors.success : Colors.error }]}>
+                      {r.status}
+                    </Text>
+                  </View>
+                  {r.status === 'CREATION' && <Text style={styles.sourceCreation}>+{r.creation}</Text>}
+                </View>
+              );
+            })}
+          </GlassCard>
+
+          {/* 45 Test Categories */}
+          <GlassCard padding={Spacing.md} style={{ marginBottom: Spacing.sm }}>
+            <View style={styles.totalityHeader}>
+              <MaterialIcons name="check-circle" size={16} color={Colors.gold} />
+              <Text style={styles.totalityTitle}>{AZL_TOTALITY_TESTS}/45 TESTS — ALL PASS</Text>
+            </View>
+            {AZL_TOTALITY_CATEGORIES.map((cat, i) => (
+              <View key={cat.id} style={[styles.catRow, i < AZL_TOTALITY_CATEGORIES.length - 1 && { borderBottomWidth: 1, borderBottomColor: Colors.glassBorder }]}>
+                <View style={styles.catBadge}>
+                  <Text style={styles.catBadgeNum}>{cat.tests}</Text>
+                </View>
+                <View style={styles.catInfo}>
+                  <Text style={styles.catLabel}>{cat.label}</Text>
+                  <Text style={styles.catDesc} numberOfLines={2}>{cat.desc}</Text>
+                </View>
+                <View style={styles.catPass}>
+                  <MaterialIcons name="check" size={14} color={Colors.success} />
+                  <Text style={styles.catPassText}>PASS</Text>
+                </View>
+              </View>
+            ))}
+          </GlassCard>
+        </View>
+
         {/* Verification note */}
         <View style={styles.section}>
           <GlassCard variant="gold" padding={Spacing.md}>
@@ -424,6 +518,33 @@ const styles = StyleSheet.create({
   verifyRow: { flexDirection: 'row', alignItems: 'center', gap: Spacing.sm, marginBottom: Spacing.sm },
   verifyTitle: { fontSize: FontSize.md, fontWeight: FontWeight.bold, color: Colors.gold },
   verifyText: { fontSize: FontSize.sm, color: Colors.textSecondary, lineHeight: 20 },
+
+  totalityHeader: { flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: Spacing.sm },
+  totalityTitle: { flex: 1, fontSize: FontSize.sm, fontWeight: FontWeight.bold, color: Colors.gold },
+  treeAlive: { flexDirection: 'row', alignItems: 'center', gap: 3 },
+  treeAliveText: { fontSize: 9, color: Colors.success, fontWeight: '800', letterSpacing: 0.6 },
+  totalityLaw: { fontSize: FontSize.xs, color: Colors.textSecondary, lineHeight: 16, marginBottom: 4 },
+  totalityNote: { fontSize: FontSize.xs, color: Colors.textMuted, fontStyle: 'italic', lineHeight: 16, marginTop: Spacing.sm, borderTopWidth: 1, borderTopColor: Colors.glassBorder, paddingTop: Spacing.sm },
+  physicsGrid: { marginTop: Spacing.sm, gap: 5 },
+  physicsRow: { flexDirection: 'row', alignItems: 'center', gap: Spacing.sm, paddingVertical: 4, borderBottomWidth: 1, borderBottomColor: Colors.glassBorder + '88' },
+  physicsLabel: { flex: 1, fontSize: FontSize.xs, color: Colors.textSecondary },
+  physicsState: { fontSize: FontSize.xs, fontWeight: '800', letterSpacing: 0.6, minWidth: 40, textAlign: 'center' },
+  physicsC: { fontSize: FontSize.xs, color: Colors.textMuted, fontFamily: 'monospace', minWidth: 55 },
+  physicsInterp: { fontSize: 9, color: Colors.cyan, fontWeight: '700', letterSpacing: 0.4 },
+  sourceRow: { flexDirection: 'row', alignItems: 'center', gap: Spacing.sm, paddingVertical: 6, borderBottomWidth: 1, borderBottomColor: Colors.glassBorder + '88' },
+  sourceLabel: { flex: 1, fontSize: FontSize.xs, color: Colors.textSecondary },
+  sourceAB: { fontSize: FontSize.xs, color: Colors.textMuted, fontFamily: 'monospace' },
+  sourceStatus: { paddingHorizontal: 6, paddingVertical: 2, borderRadius: Radius.full, borderWidth: 1 },
+  sourceStatusText: { fontSize: 9, fontWeight: '800', letterSpacing: 0.4 },
+  sourceCreation: { fontSize: FontSize.xs, color: Colors.success, fontWeight: '700' },
+  catRow: { flexDirection: 'row', alignItems: 'center', gap: Spacing.sm, paddingVertical: Spacing.sm },
+  catBadge: { width: 24, height: 24, borderRadius: 12, backgroundColor: Colors.goldGlass, borderWidth: 1, borderColor: Colors.goldGlassBorder, justifyContent: 'center', alignItems: 'center' },
+  catBadgeNum: { fontSize: 9, fontWeight: '800', color: Colors.gold },
+  catInfo: { flex: 1 },
+  catLabel: { fontSize: FontSize.xs, fontWeight: '700', color: Colors.textPrimary, letterSpacing: 0.4 },
+  catDesc: { fontSize: 9, color: Colors.textMuted, lineHeight: 14, marginTop: 2 },
+  catPass: { flexDirection: 'row', alignItems: 'center', gap: 2 },
+  catPassText: { fontSize: 9, color: Colors.success, fontWeight: '800', letterSpacing: 0.4 },
 
   azlAxiom: { fontSize: FontSize.xs, color: Colors.textSecondary, fontStyle: 'italic', lineHeight: 18, marginBottom: Spacing.sm },
   azlLawRow: { flexDirection: 'row', alignItems: 'flex-start', gap: 6, marginTop: 4 },

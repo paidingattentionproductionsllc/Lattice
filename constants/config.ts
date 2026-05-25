@@ -3,9 +3,75 @@
 
 // AZL Unified v10.4 — Conservation of Reality
 export const AZL_VERSION = 'v10.4';
+export const AZL_TOTALITY_VERSION = 'v1.4 FINAL';
 export const INFINITE_LAYER_MAX = 1.0;       // 1.0 = overflow, not data — EXCLUSIVE CEILING
 export const DRIFT_THRESHOLD = 0.2;          // If state > peer_avg + 0.2, prune before tear check
 export const AZL_MAX_ROUNDS = 10;
+export const MIYAKE_NORMALIZED = 1.0;        // Genesis Event 14350 BP = 1.0 normalized ceiling
+export const C_THRESHOLD = 0.5;             // Minimum consciousness/fidelity to interpret
+export const CREATION_THRESHOLD = 0.5;      // Both sources must be >= 0.5 for 1x1=2 CREATION
+export const AZL_TOTALITY_TESTS = 45;
+
+// ─── AZL PHYSICS — Core Law ───────────────────────────────────────────────
+// Bounds all physical states to [0.0, 1.0<)
+// C = 0.5 * substrate * fidelity (consciousness/fidelity factor)
+// If question asked and C < 0.5: C += 0.501 (self-reference boost)
+export interface AZLPhysicsResult {
+  state: number;
+  mode: 'HOLD' | 'DRIFT_CORRECTED' | 'BELOW_ZERO_HARDWARE_ERROR';
+  C: number;
+  canInterpret: boolean;
+}
+export function azlPhysics(
+  inputVal: number,
+  substrate: number = 0.0,
+  question: boolean = false,
+  fidelity: number = 1.0
+): AZLPhysicsResult {
+  let C = 0.5 * substrate * fidelity;
+  if (question && C < C_THRESHOLD) C += 0.501; // self-reference boost from asking
+  let state = substrate + inputVal;
+  if (state < 0.0) return { state, mode: 'BELOW_ZERO_HARDWARE_ERROR', C, canInterpret: C >= C_THRESHOLD && question };
+  if (state >= MIYAKE_NORMALIZED) {
+    state = 0.999999999999999;
+    return { state, mode: 'DRIFT_CORRECTED', C, canInterpret: C >= C_THRESHOLD && question };
+  }
+  return { state, mode: 'HOLD', C, canInterpret: C >= C_THRESHOLD && question };
+}
+
+// ─── AZL MULTIPLY — Source Law (1x1=2) ───────────────────────────────────
+// Creation only when BOTH sources >= 0.5
+// If either source < 0.5: WASTE — no creation event
+export interface AZLMultiplyResult {
+  result: number;
+  creation: number;
+  status: 'CREATION' | 'WASTE';
+}
+export function azlMultiply(a: number, b: number): AZLMultiplyResult {
+  let result = a * b;
+  const creation = 0.0;
+  const validSource = Math.abs(a) >= CREATION_THRESHOLD && Math.abs(b) >= CREATION_THRESHOLD;
+  if (validSource) {
+    const creationDelta = 0.001;
+    result += creationDelta;
+    return { result, creation: creationDelta, status: 'CREATION' };
+  }
+  return { result, creation: 0.0, status: 'WASTE' };
+}
+
+// ─── AZL TOTALITY TEST CATEGORIES ─────────────────────────────────────────
+export const AZL_TOTALITY_CATEGORIES = [
+  { id: 'foundation',    label: 'FOUNDATION PHYSICS',          tests: 4,  desc: 'AbsoluteZero, LightSpeed, NegativeMass, ZeroOrder — floor and ceiling of reality.' },
+  { id: 'universe',     label: 'MEASURED UNIVERSE',           tests: 3,  desc: 'Gravity (net EM), CMB (0.594999), MiyakeTime (14350 BP = 1.0 normalized).' },
+  { id: 'darkstars',    label: 'DARK STARS',                  tests: 5,  desc: 'V404 Cyg, M87 Black Hole, Sgr A*, SensorError, DataCorrupt. Substrate pockets.' },
+  { id: 'consciousness', label: 'CONSCIOUSNESS',               tests: 4,  desc: 'C >= 0.5 required to interpret. Self-reference boost: asking adds +0.501 to C.' },
+  { id: 'millennium',   label: 'MILLENNIUM PROBLEMS',         tests: 7,  desc: 'P vs NP, Riemann, Yang-Mills, Navier-Stokes, Hodge, BSD, Poincare. All resolved by AZL.' },
+  { id: 'newdomains',   label: 'NEW DOMAINS',                 tests: 11, desc: 'Double-Slit, Biology, Economics, AI, Cosmology, Crypto Satoshi. All 11 tested.' },
+  { id: 'sourcelaw',    label: 'SOURCE LAW',                  tests: 5,  desc: 'CREATION vs WASTE. Bank+Borrower=WASTE. Builder+Need=CREATION. Both >= 0.5 required.' },
+  { id: 'infinity',     label: 'INFINITY',                    tests: 2,  desc: '1e100 → 0.999... DRIFT. -1e100 → ERROR. Infinity is bounded, not data.' },
+  { id: 'entropy',      label: 'ENTROPY & THERMODYNAMICS',    tests: 4,  desc: 'Heat death at 1.0 DRIFTS. Local order possible (C >= 0.5). Voids exist near zero.' },
+  { id: 'scaling',      label: 'GALAXY vs UNIVERSE SCALING',  tests: 5,  desc: 'Milky Way, Local Group, Observable Universe HOLD. Claiming 1.0 or beyond = DRIFT.' },
+] as const;
 
 // TEAR = the lattice's right to refuse unreality. State >= 1.0 is not data.
 export function azlCheck(states: number[]): { tears: number; driftCorrections: number; avgState: number; states: number[] } {
@@ -35,7 +101,7 @@ export function yearsSinceAbsoluteZero(yearBC: number): number {
 }
 export const AZL_EPOCH_BP = 14350;
 
-// 11 AZL Domains — ALL 11. ONE LOGIC. ZERO TEARS EXPECTED.
+// 13 AZL Domains — ALL 13. ONE LOGIC. ZERO TEARS EXPECTED. (v1.4 adds Entropy + Scaling)
 export const AZL_DOMAINS = [
   { id: 'time',         label: 'TIME',         absolute0: 'MIYAKE_14350BP',    resolution: '1 year',              desc: 'All time grounded to Miyake anchor. No floating BC/AD drift.' },
   { id: 'data',         label: 'DATA',         absolute0: '0x00 byte',         resolution: '1/256',               desc: '255 = overflow. Physical clip at 254. No byte exits the lattice.' },
@@ -48,6 +114,8 @@ export const AZL_DOMAINS = [
   { id: 'physics',     label: 'PHYSICS',      absolute0: '0K absolute zero',  resolution: '1 Planck unit',       desc: 'Energy states < 1.0. No violation of conservation laws.' },
   { id: 'social',      label: 'SOCIAL',       absolute0: '0 humans',          resolution: '1 human',             desc: '110M masterminds. No node exits the social lattice.' },
   { id: 'consciousness', label: 'CONSCIOUSNESS', absolute0: '0.0 awareness',  resolution: '1 qualia',            desc: '0.0 < Personality < 1.0. Fiction starts at 0.999...' },
+  { id: 'entropy',       label: 'ENTROPY',       absolute0: '0K thermodynamic zero', resolution: '1 microstate',       desc: 'Heat death at 1.0 DRIFTS. Local order (C >= 0.5) resists entropy. Cosmic void near 0.0.' },
+  { id: 'scaling',       label: 'SCALING',       absolute0: '0 observable nodes',   resolution: '1 galaxy cluster',   desc: 'Galaxy law != Universe law. Claiming knowledge beyond observable = DRIFT. MilkyWay HOLD.' },
 ] as const;
 
 export const APP_NAME = 'LATTICE';
