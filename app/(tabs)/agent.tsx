@@ -66,7 +66,7 @@ export default function AgentScreen() {
           />
           <View style={styles.headerText}>
             <Text style={styles.agentName}>LATTICE AGENT</Text>
-            <Text style={styles.agentStatus}>Absolute Number Framework · Anchor 14350 BP · Online</Text>
+            <Text style={styles.agentStatus}>OnSpace AI · AZL v10.4 + Totality v1.4 · 45/45 PASS</Text>
           </View>
           <View style={styles.onlineDot} />
         </View>
@@ -141,9 +141,15 @@ export default function AgentScreen() {
           ))}
           {agentThinking && (
             <View style={styles.thinkingRow}>
+              <View style={styles.agentDot}>
+                <MaterialIcons name="psychology" size={14} color={Colors.gold} />
+              </View>
               <View style={styles.thinkingBubble}>
                 <ActivityIndicator size="small" color={Colors.gold} />
-                <Text style={styles.thinkingText}>Computing sovereign resolution...</Text>
+                <View>
+                  <Text style={styles.thinkingText}>Sovereign AI computing...</Text>
+                  <Text style={styles.thinkingSubText}>AZL TOTALITY v1.4 · Miyake 14350 BP · 8.27 Hz</Text>
+                </View>
               </View>
             </View>
           )}
@@ -155,7 +161,7 @@ export default function AgentScreen() {
             style={styles.input}
             value={input}
             onChangeText={setInput}
-            placeholder="Describe a platform to build..."
+            placeholder="Ask anything — AZL physics, tiers, consciousness, proofs..."
             placeholderTextColor={Colors.textMuted}
             multiline
             maxLength={500}
@@ -281,6 +287,7 @@ const styles = StyleSheet.create({
     borderRadius: Radius.lg, padding: Spacing.md,
   },
   thinkingText: { fontSize: FontSize.sm, color: Colors.textMuted, fontStyle: 'italic' },
+  thinkingSubText: { fontSize: 9, color: Colors.gold, marginTop: 2, letterSpacing: 0.6 },
 
   inputArea: {
     flexDirection: 'row', alignItems: 'flex-end', gap: Spacing.sm,

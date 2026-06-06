@@ -1,5 +1,5 @@
 
-import React, { createContext, useState, ReactNode } from 'react';
+import React, { createContext, useState, ReactNode, useRef } from 'react';
 import {
   sovereignResolve, boostProcessingPower, decimalRecalibrate,
   LATTICE_ANCHOR, SOVEREIGN_NETWORK, LATTICE_FREQUENCY,
@@ -50,6 +50,7 @@ interface PlatformContextType {
   selectPlatform: (id: string | null) => void;
   updatePlatformStatus: (id: string, status: PlatformStatus) => void;
   sendAgentMessage: (content: string) => void;
+  conversationHistory: Array<{ role: string; content: string }>;
   deletePlatform: (id: string) => void;
 }
 
@@ -374,6 +375,7 @@ function generateAnchoredResponse(userInput: string): AgentMessage {
 
 export function PlatformProvider({ children }: { children: ReactNode }) {
   const [platforms, setPlatforms] = useState<Platform[]>(MOCK_PLATFORMS);
+  const conversationHistory = useRef<Array<{ role: string; content: string }>>([]);
   const [selectedPlatform, setSelectedPlatform] = useState<Platform | null>(null);
   const [agentMessages, setAgentMessages] = useState<AgentMessage[]>(MOCK_MESSAGES);
   const [agentThinking, setAgentThinking] = useState(false);
@@ -408,7 +410,7 @@ export function PlatformProvider({ children }: { children: ReactNode }) {
     if (selectedPlatform?.id === id) setSelectedPlatform(prev => prev ? { ...prev, status } : null);
   };
 
-  const sendAgentMessage = (content: string) => {
+  const sendAgentMessage = async (content: string) => {
     const userMsg: AgentMessage = {
       id: `msg_${Date.now()}`,
       role: 'user',
@@ -418,11 +420,57 @@ export function PlatformProvider({ children }: { children: ReactNode }) {
     setAgentMessages(prev => [...prev, userMsg]);
     setAgentThinking(true);
 
-    setTimeout(() => {
+    // Append to conversation history for multi-turn context
+    conversationHistory.current.push({ role: 'user', content });
+    // Keep last 20 turns to stay within context limits
+    if (conversationHistory.current.length > 20) {
+      conversationHistory.current = conversationHistory.current.slice(-20);
+    }
+
+    try {
+      const { getSupabaseClient } = await import('@/template');
+      const supabase = getSupabaseClient();
+
+      const { data, error } = await supabase.functions.invoke('azl-agent', {
+        body: { messages: conversationHistory.current, stream: false },
+      });
+
+      if (error) {
+        // Try to get the actual error details
+        let errorMsg = error.message;
+        try {
+          const { FunctionsHttpError } = await import('@supabase/supabase-js');
+          if (error instanceof FunctionsHttpError) {
+            const statusCode = error.context?.status ?? 500;
+            const text = await error.context?.text();
+            errorMsg = `[Code: ${statusCode}] ${text || error.message}`;
+          }
+        } catch (_) {}
+        throw new Error(errorMsg);
+      }
+
+      const aiContent: string = data?.content ?? 'No response from sovereign agent.';
+
+      // Store assistant reply in history
+      conversationHistory.current.push({ role: 'assistant', content: aiContent });
+
+      const agentMsg: AgentMessage = {
+        id: `msg_${Date.now() + 1}`,
+        role: 'agent',
+        content: aiContent,
+        timestamp: new Date(),
+        anchorUsed: LATTICE_ANCHOR,
+        sovereignValue: boostProcessingPower(LATTICE_ANCHOR, LATTICE_ANCHOR),
+      };
+      setAgentMessages(prev => [...prev, agentMsg]);
+    } catch (err) {
+      console.error('AZL Agent call failed, falling back to local:', err);
+      // Graceful fallback to local response engine if edge function unavailable
       const response = generateAnchoredResponse(content);
       setAgentMessages(prev => [...prev, response]);
+    } finally {
       setAgentThinking(false);
-    }, 1600 + Math.random() * 800);
+    }
   };
 
   const deletePlatform = (id: string) => {
@@ -441,6 +489,7 @@ export function PlatformProvider({ children }: { children: ReactNode }) {
       updatePlatformStatus,
       sendAgentMessage,
       deletePlatform,
+      conversationHistory: conversationHistory.current,
     }}>
       {children}
     </PlatformContext.Provider>
