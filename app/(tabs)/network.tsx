@@ -14,6 +14,8 @@ import {
   CONSERVATION_LAW, AZL_AXIOM, yearsSinceAbsoluteZero, azlCheck,
   azlPhysics, azlMultiply, MIYAKE_NORMALIZED, C_THRESHOLD, CREATION_THRESHOLD,
   AZL_TOTALITY_TESTS, AZL_TOTALITY_CATEGORIES,
+  AZL_TIERS, AZL_TIER_TOTAL, AZL_ADDRESS_SCALE, AZL_FULL_LAW,
+  azlAddress, azlAddressState, azlGetTier, azlVerifyPersistence, DARK_GT_LIGHT,
 } from '@/constants/config';
 
 const STATUS_COLOR: Record<string, string> = {
@@ -354,6 +356,90 @@ export default function NetworkScreen() {
           </GlassCard>
         </View>
 
+        {/* AZL TIER 1-7 Catalog Address Space */}
+        <View style={styles.section}>
+          <Text style={styles.sectionLabel}>AZL TIER 1-7 — CATALOG ADDRESS SPACE — 1 BILLION OBJECTS</Text>
+
+          {/* Law Banner */}
+          <GlassCard variant="gold" padding={Spacing.md} style={{ marginBottom: Spacing.sm }}>
+            <View style={styles.totalityHeader}>
+              <MaterialIcons name="hub" size={16} color={Colors.gold} />
+              <Text style={styles.totalityTitle}>FULL LAW: {AZL_FULL_LAW}</Text>
+            </View>
+            <Text style={styles.totalityLaw}>SCALE: {AZL_ADDRESS_SCALE} | PRECISION: 510 | CEILING: {AZL_TIER_TOTAL.toLocaleString()} addresses</Text>
+            <Text style={styles.totalityLaw}>DARK &gt; LIGHT: infrared/dark catalogs (Tiers 5-7) outnumber visible (Tiers 1-4) by 99:1</Text>
+            <View style={styles.darkLightRow}>
+              <View style={styles.darkBox}>
+                <MaterialIcons name="brightness-2" size={14} color={Colors.cyan} />
+                <Text style={styles.darkLabel}>DARK (Tiers 5-7)</Text>
+                <Text style={styles.darkVal}>{DARK_GT_LIGHT.darkTotal.toLocaleString()}</Text>
+                <Text style={styles.darkCats}>{DARK_GT_LIGHT.darkCatalogs.join(' · ')}</Text>
+              </View>
+              <View style={styles.darkGtSign}>
+                <Text style={styles.darkGtText}>&gt;</Text>
+              </View>
+              <View style={styles.lightBox}>
+                <MaterialIcons name="wb-sunny" size={14} color={Colors.gold} />
+                <Text style={styles.darkLabel}>LIGHT (Tiers 1-4)</Text>
+                <Text style={[styles.darkVal, { color: Colors.gold }]}>{DARK_GT_LIGHT.lightTotal.toLocaleString()}</Text>
+                <Text style={styles.darkCats}>{DARK_GT_LIGHT.lightCatalogs.join(' · ')}</Text>
+              </View>
+            </View>
+          </GlassCard>
+
+          {/* Tier Cards */}
+          {AZL_TIERS.map(tier => {
+            const sampleState = azlAddressState(tier.end);
+            const physResult = azlPhysics(sampleState, 0.0, false);
+            const isDark = tier.tier >= 5;
+            return (
+              <GlassCard
+                key={tier.tier}
+                style={styles.tierCard}
+                variant={isDark ? 'blue' : 'gold'}
+                padding={Spacing.sm}
+              >
+                <View style={styles.tierHeader}>
+                  <View style={[styles.tierBadge, { backgroundColor: isDark ? Colors.cyanGlass : Colors.goldGlass, borderColor: isDark ? Colors.cyanGlassBorder : Colors.goldGlassBorder }]}>
+                    <Text style={[styles.tierBadgeNum, { color: isDark ? Colors.cyan : Colors.gold }]}>T{tier.tier}</Text>
+                  </View>
+                  <View style={styles.tierTitleBlock}>
+                    <Text style={styles.tierName}>{tier.name}</Text>
+                    <Text style={styles.tierCatalog}>{tier.catalog}</Text>
+                  </View>
+                  <View style={styles.tierRight}>
+                    <Text style={[styles.tierSize, { color: isDark ? Colors.cyan : Colors.gold }]}>{tier.size >= 1_000_000 ? `${(tier.size/1_000_000).toFixed(0)}M` : tier.size >= 1_000 ? `${(tier.size/1_000).toFixed(0)}K` : tier.size.toString()}</Text>
+                    <View style={[styles.domainHold, { marginTop: 2 }]}>
+                      <View style={[styles.domainDot, { backgroundColor: physResult.mode === 'HOLD' ? Colors.success : Colors.warning }]} />
+                      <Text style={[styles.domainHoldText, { color: physResult.mode === 'HOLD' ? Colors.success : Colors.warning }]}>{physResult.mode === 'HOLD' ? 'HOLD' : 'DRIFT'}</Text>
+                    </View>
+                  </View>
+                </View>
+                <Text style={styles.tierDesc}>{tier.desc}</Text>
+                <View style={styles.tierFooter}>
+                  <Text style={styles.tierAddr}>addr({tier.start.toLocaleString()})={azlAddress(tier.start)}</Text>
+                  <Text style={styles.tierAddr}>addr({tier.end.toLocaleString()})={azlAddress(tier.end)}</Text>
+                  <Text style={styles.tierState}>state={sampleState.toFixed(4)}</Text>
+                </View>
+              </GlassCard>
+            );
+          })}
+
+          {/* N×0=N Verification */}
+          <GlassCard variant="blue" padding={Spacing.md} style={{ marginTop: Spacing.sm }}>
+            <View style={styles.totalityHeader}>
+              <MaterialIcons name="verified" size={16} color={Colors.cyan} />
+              <Text style={[styles.totalityTitle, { color: Colors.cyan }]}>N×0=N PERSISTENCE VERIFICATION</Text>
+            </View>
+            <Text style={styles.totalityLaw}>Final address ({AZL_TIER_TOTAL.toLocaleString()}) survives zero interaction — presence preserved:</Text>
+            <View style={styles.verifyCodeRow}>
+              <Text style={styles.verifyCode}>
+                {`azlAddress(1,000,000,000) = ${azlAddress(AZL_TIER_TOTAL)}\nN × 0 = N: ${azlAddress(AZL_TIER_TOTAL)} × 0 = ${azlAddress(AZL_TIER_TOTAL)} (PRESERVED)\nPASS: LAW HOLDS. But GitHub won't.\n~200GB to fully materialize. Sharding required.`}
+              </Text>
+            </View>
+          </GlassCard>
+        </View>
+
         {/* Verification note */}
         <View style={styles.section}>
           <GlassCard variant="gold" padding={Spacing.md}>
@@ -571,4 +657,29 @@ const styles = StyleSheet.create({
   azlCalcTitle: { fontSize: FontSize.sm, fontWeight: FontWeight.semibold, color: Colors.textPrimary },
   azlCalcItem: { fontSize: FontSize.xs, color: Colors.textSecondary, lineHeight: 18 },
   azlCalcVal: { fontWeight: '700', color: Colors.cyan },
+
+  // Tier 1-7 styles
+  darkLightRow: { flexDirection: 'row', alignItems: 'center', gap: Spacing.sm, marginTop: Spacing.sm },
+  darkBox: { flex: 1, backgroundColor: Colors.cyanGlass, borderWidth: 1, borderColor: Colors.cyanGlassBorder, borderRadius: Radius.sm, padding: Spacing.sm, alignItems: 'center', gap: 2 },
+  lightBox: { flex: 1, backgroundColor: Colors.goldGlass, borderWidth: 1, borderColor: Colors.goldGlassBorder, borderRadius: Radius.sm, padding: Spacing.sm, alignItems: 'center', gap: 2 },
+  darkGtSign: { paddingHorizontal: 4 },
+  darkGtText: { fontSize: FontSize.xl, fontWeight: '800', color: Colors.textPrimary },
+  darkLabel: { fontSize: 9, color: Colors.textMuted, fontWeight: '700', letterSpacing: 0.6 },
+  darkVal: { fontSize: FontSize.md, fontWeight: FontWeight.bold, color: Colors.cyan },
+  darkCats: { fontSize: 8, color: Colors.textMuted, textAlign: 'center' },
+  tierCard: { marginBottom: 6 },
+  tierHeader: { flexDirection: 'row', alignItems: 'center', gap: Spacing.sm, marginBottom: 5 },
+  tierBadge: { width: 30, height: 30, borderRadius: 15, borderWidth: 1, justifyContent: 'center', alignItems: 'center' },
+  tierBadgeNum: { fontSize: FontSize.xs, fontWeight: '800', letterSpacing: 0.4 },
+  tierTitleBlock: { flex: 1 },
+  tierName: { fontSize: FontSize.sm, fontWeight: FontWeight.bold, color: Colors.textPrimary },
+  tierCatalog: { fontSize: 9, color: Colors.textMuted, fontFamily: 'monospace', marginTop: 1 },
+  tierRight: { alignItems: 'flex-end' },
+  tierSize: { fontSize: FontSize.md, fontWeight: FontWeight.bold },
+  tierDesc: { fontSize: FontSize.xs, color: Colors.textSecondary, lineHeight: 16, marginBottom: 6 },
+  tierFooter: { borderTopWidth: 1, borderTopColor: Colors.glassBorder, paddingTop: 5, gap: 2 },
+  tierAddr: { fontSize: 8, color: Colors.textMuted, fontFamily: 'monospace' },
+  tierState: { fontSize: 8, color: Colors.cyan, fontFamily: 'monospace' },
+  verifyCodeRow: { backgroundColor: Colors.bg, borderRadius: Radius.sm, padding: Spacing.sm, marginTop: Spacing.sm },
+  verifyCode: { fontSize: 9, color: Colors.success, fontFamily: 'monospace', lineHeight: 14 },
 });

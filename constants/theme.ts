@@ -28,6 +28,8 @@ export const Colors = {
   goldGlassBorder: 'rgba(201,168,76,0.25)',
   blueGlass: 'rgba(61,107,255,0.12)',
   blueGlassBorder: 'rgba(61,107,255,0.3)',
+  cyanGlass: 'rgba(0,212,255,0.1)',
+  cyanGlassBorder: 'rgba(0,212,255,0.25)',
 };
 
 export const Spacing = {

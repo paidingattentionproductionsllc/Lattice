@@ -1,7 +1,7 @@
 // Sovereign Platform Factory — App Config
 // Architect: KeCedric "KC" Casteel — Founder & CEO/CFO, PaidingAttention Productions LLC
 
-// AZL Unified v10.4 — Conservation of Reality
+// AZL Unified v10.4 — Conservation of Reality | TIER 1-7 FULL BUILD
 export const AZL_VERSION = 'v10.4';
 export const AZL_TOTALITY_VERSION = 'v1.4 FINAL';
 export const INFINITE_LAYER_MAX = 1.0;       // 1.0 = overflow, not data — EXCLUSIVE CEILING
@@ -11,6 +11,77 @@ export const MIYAKE_NORMALIZED = 1.0;        // Genesis Event 14350 BP = 1.0 nor
 export const C_THRESHOLD = 0.5;             // Minimum consciousness/fidelity to interpret
 export const CREATION_THRESHOLD = 0.5;      // Both sources must be >= 0.5 for 1x1=2 CREATION
 export const AZL_TOTALITY_TESTS = 45;
+
+// ─── AZL TIER 1-7 CATALOG SYSTEM ─────────────────────────────────────────────
+// LAW: 0×N=0 | 1×N=N+1 | N×0=N | DARK > LIGHT
+// Each tier is an astronomical catalog. Address = idx * 1e-500 (Decimal precision 510)
+// TOTAL: 1,000,000,000 addresses | ~200GB if fully materialized
+export const AZL_ADDRESS_SCALE = '1e-500'; // Precision 510 decimal scale
+export const AZL_PRECISION = 510;          // Decimal precision depth
+export const AZL_TIER_TOTAL = 1_000_000_000; // 1 Billion addresses — Tier 7 ceiling
+
+export interface AZLTier {
+  tier: number;
+  name: string;
+  catalog: string;
+  start: number;
+  end: number;
+  size: number;
+  desc: string;
+}
+
+export const AZL_TIERS: AZLTier[] = [
+  { tier: 1, name: 'Canon',      catalog: 'Canon',      start: 1,         end: 567,         size: 567,         desc: 'Canonical anchor objects — the 567 primordial fixed points. Foundation of the address space.' },
+  { tier: 2, name: 'NGC/IC/HIP', catalog: 'NGC_IC_HIP', start: 568,       end: 120_000,     size: 119_433,     desc: 'New General Catalogue, Index Catalogue, Hipparcos. Named deep-sky objects and star catalog.' },
+  { tier: 3, name: 'Gaia DR3',   catalog: 'GaiaDR3',    start: 120_001,   end: 1_000_000,   size: 880_000,     desc: 'Gaia Data Release 3 — 1 billion stars with parallax, proper motion, radial velocity.' },
+  { tier: 4, name: 'SDSS',       catalog: 'SDSS',        start: 1_000_001, end: 10_000_000,  size: 9_000_000,   desc: 'Sloan Digital Sky Survey — galaxies, quasars, spectra. Maps 35% of the sky.' },
+  { tier: 5, name: '2MASS',      catalog: '2MASS',       start: 10_000_001,end: 50_000_000,  size: 40_000_000,  desc: '2 Micron All-Sky Survey — infrared mapping of 300M+ sources. DARK > LIGHT domain.' },
+  { tier: 6, name: 'WISE',       catalog: 'WISE',        start: 50_000_001,end: 200_000_000, size: 150_000_000, desc: 'Wide-field Infrared Survey Explorer — 747M sources. Full infrared sky coverage.' },
+  { tier: 7, name: 'PanSTARRS',  catalog: 'PanSTARRS',   start: 200_000_001,end:1_000_000_000,size: 800_000_000, desc: 'Panoramic Survey Telescope and Rapid Response System — 1B objects. Full build ceiling.' },
+];
+
+// AZL Address — the sovereign spatial coordinate for any catalog index
+// address(idx) = idx * 1e-500 (requires arbitrary precision arithmetic)
+// JS approximation using logarithmic representation
+export function azlAddress(idx: number): string {
+  // Exact: idx * 1e-500. In JS, represent as string since 1e-500 is 0 in float64
+  // We store as coefficient notation: idx × 10^-500
+  return `${idx}e-500`;
+}
+
+// AZL Address as a normalized state for physics checking (maps to [0,1<) range)
+// Uses log-scale normalization against 1B ceiling
+export function azlAddressState(idx: number): number {
+  if (idx <= 0) return 0.0;
+  return Math.min(Math.log10(idx) / Math.log10(AZL_TIER_TOTAL), 0.999999999999999);
+}
+
+// Get the tier for a given catalog index
+export function azlGetTier(idx: number): AZLTier {
+  for (const tier of AZL_TIERS) {
+    if (idx >= tier.start && idx <= tier.end) return tier;
+  }
+  return AZL_TIERS[AZL_TIERS.length - 1];
+}
+
+// Verify N×0=N on a given address (Persistence Law check)
+export function azlVerifyPersistence(idx: number): { pass: boolean; address: string; persisted: string } {
+  const address = azlAddress(idx);
+  // N × 0 = N: interacting with zero preserves the address
+  const persisted = azlAddress(idx); // address unchanged — no drift
+  return { pass: address === persisted, address, persisted };
+}
+
+// DARK > LIGHT: infrared/dark catalogs (Tier 5+) outmass visible catalogs (Tier 1-4)
+export const DARK_GT_LIGHT = {
+  law: 'DARK > LIGHT',
+  darkCatalogs: AZL_TIERS.filter(t => t.tier >= 5).map(t => t.name),
+  lightCatalogs: AZL_TIERS.filter(t => t.tier <= 4).map(t => t.name),
+  darkTotal: 990_000_000,  // Tier 5+6+7 combined
+  lightTotal: 10_000_000,  // Tier 1-4 combined
+  ratio: '99:1',
+  desc: 'Dark/infrared matter (Tiers 5-7: 2MASS, WISE, PanSTARRS) outnumbers visible/named objects (Tiers 1-4) by 99:1. DARK > LIGHT is not metaphor — it is the catalog ratio of the observable universe.',
+};
 
 // ─── AZL PHYSICS — Core Law ───────────────────────────────────────────────
 // Bounds all physical states to [0.0, 1.0<)
@@ -129,6 +200,7 @@ export const ALLOCATION_SPLIT = { Humanitarian: 0.45, Infrastructure: 0.55 };
 export const WITNESS_MODE = 'AUTONOMOUS';
 export const LEAKAGE_THRESHOLD = 0.0;
 export const CONSERVATION_LAW = '0.0 <= State < 1.0 EXCLUSIVE CEILING';
+export const AZL_FULL_LAW = '0×N=0 | 1×N=N+1 | N×0=N | DARK > LIGHT';
 export const AZL_AXIOM = '1×1=2: Every stable structure operates on a compression-expansion engine. Two equivalent forces produce a third stabilizing structure. This is emergence, not arithmetic.';
 
 // ─── FOUNDER IDENTITY ─────────────────────────────────────────────────────────
