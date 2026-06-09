@@ -22,7 +22,7 @@ jobs:
           pip install numpy
       
       - name: Run Lattice Unified
-        run: python -u lattice_unified.py
+        run: python -u azl_unified.py
       
       - name: Upload Lattice Artifact
         uses: actions/upload-artifact@v4
