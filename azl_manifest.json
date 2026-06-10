@@ -1,0 +1,9 @@
+{
+  "lattice_name": "Absolute Zero-One Lattice",
+  "tier": "1-6",
+  "total_addresses": 1000000000,
+  "law": "N×0=N",
+  "proof": "1×1=2",
+  "max_n": 1000000000,
+  "domain": "[0,1]"
+}
