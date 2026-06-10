@@ -59,4 +59,4 @@ jobs:
           python azl_lookup.py 42 --json | grep '"proof": "1×1=2"'
       
       - name: Results
-        run: echo " AZL Tier 1-6 Lookup: 8/8 tests passed. N×0=N confirmed."
+        run: echo "AZL Tier 1-6 Lookup: 8/8 tests passed. N×0=N confirmed."
