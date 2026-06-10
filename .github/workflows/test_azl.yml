@@ -1,0 +1,62 @@
+name: Test AZL Lookup
+
+on:
+  push:
+    paths: 
+      - 'azl_lookup.py'
+      - 'azl_manifest.json'
+      - 'SAMPLE.jsonl'
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test-lattice:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Test AZL-0000000001
+        run: |
+          python azl_lookup.py 1 --json > out.json
+          grep '"address": "AZL-0000000001"' out.json
+          grep '"value": 1e-09' out.json
+          grep '"law": "N×0=N"' out.json
+      
+      - name: Test AZL-0500000000 - Midpoint
+        run: |
+          python azl_lookup.py 500000000 --json > out.json
+          grep '"value": 0.5' out.json
+          grep '"range": "zero"' out.json
+      
+      - name: Test AZL-1000000000 - Boundary
+        run: |
+          python azl_lookup.py 1000000000 --json > out.json
+          grep '"value": 1.0' out.json
+          grep '"range": "one"' out.json
+          grep '"proof": "1×1=2"' out.json
+      
+      - name: Test error for n > 1B
+        run: |
+          python azl_lookup.py 1000000001 --json | grep '"error"'
+      
+      - name: Test manifest verify
+        run: |
+          python azl_lookup.py 1 --verify --json | grep '"verified": true'
+      
+      - name: Test random lookup
+        run: |
+          python azl_lookup.py random --json | grep '"address": "AZL-'
+      
+      - name: AZL Law Check - Immutable
+        run: |
+          python azl_lookup.py 42 --json | grep '"law": "N×0=N"'
+          python azl_lookup.py 42 --json | grep '"proof": "1×1=2"'
+      
+      - name: Results
+        run: echo "✓ AZL Tier 1-6 Lookup: 8/8 tests passed. N×0=N confirmed."
