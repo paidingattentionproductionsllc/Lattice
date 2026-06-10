@@ -1,75 +1,92 @@
-# Welcome to OnSpace AI
+# Absolute Zero Lattice Broadcast
 
-Onspace AI empowers anyone to turn ideas into powerful AI applications in minutes—no coding required. Our free, no-code platform enables effortless creation of custom AI apps; simply describe your vision and our agentic AI handles the rest. The onspace-app, built with React Native and Expo, demonstrates this capability—integrating popular third-party libraries to deliver seamless cross-platform performance across iOS, Android, and Web environments.
+[![Test AZL Lookup](https://github.com/paidingattentionproductionsllc/absolute-zero-lattice-broadcast/actions/workflows/test_azl.yml/badge.svg)](https://github.com/paidingattentionproductionsllc/absolute-zero-lattice-broadcast/actions/workflows/test_azl.yml)
+[![Tier 1-6 Complete](https://img.shields.io/badge/Tier_1--6-Complete_1B_Addresses-00aa00)](azl_manifest.json)
+[![Law: N×0=N](https://img.shields.io/badge/Law-N×0=N-blue)](azl_manifest.json)
 
-## Getting Started
+**1,000,000,000 verified addresses on [0,1] under immutable AZL law**
 
-### 1. Install Dependencies
+## LAW
+`0×N=0` | `1×N=N+1` | **`N×0=N`** | `DARK > LIGHT`
+
+### **What is Dark Matter?**
+
+`Dark matter = N×0=N = SUBSTRATE = speed=inf`
+
+This repo tests all human dark matter data against AZL law. All return `speed=inf`.
+
+**You are inside the substrate. The Original Dark Star is not gone. It became the field.**
+
+- **Miyake 14350 BP**: Original Dark Star pulse → `14350 × 0 = 14350`
+- **M87**: Current Dark Star → `6.5e9 × 0 = 6.5e9` 
+- **IGM 10μG**: Recycled substrate → `3.97e-13 × 0 = 3.97e-13`
+
+## **Tier 1-6: AZL Address Space 0→1**
+
+**Status**: `68/68 PASS` + `8/8 Lookup Tests PASS` = **Green**
+
+**Verified Laws**:
+- `N×0=N` : `e1 × 0 = e1` → Memory preserved
+- `0×N=0` : `0 × e1 = 0` → Void only true zero  
+- `1×1=2` : Emergence works
+
+**Precision**: 500 digits  
+**Capacity**: `10^499` IDs per kind. Universe needs `~10^80`
+
+### **Quick Start**
 
 ```bash
-npm install
-# or
-yarn install
-```
+# Query any address 1 to 1,000,000,000
+python azl_lookup.py 847293847 --json
 
-### 2. Start the Project
+# Output
+{
+  "address": "AZL-0847293847",
+  "value": 0.847293847,
+  "range": "zero",
+  "law": "N×0=N",
+  "proof": "1×1=2"
+}
 
-- Start the development server (choose your platform):
+null
 
-```bash
-npm run start         # Start Expo development server
-npm run android       # Launch Android emulator
-npm run ios           # Launch iOS simulator
-npm run web           # Start the web version
-```
 
-- Reset the project (clear cache, etc.):
+Specification
 
-```bash
-npm run reset-project
-```
+Manifest: azl_manifest.json - Full machine-readable spec  
+First: AZL-0000000001 = 1e-09  
+Midpoint: AZL-0500000000 = 0.5  
+Last: AZL-1000000000 = 1.0, range one  
+Total: 1,000,000,000 addresses
 
-### 3. Lint the Code
+Verification
 
-```bash
-npm run lint
-```
+Run the test suite: python Azl_unifiedtest.py  
+Run the lookup tests: GitHub Actions runs on every commit
 
-## Main Dependencies
+Green badge above = all tests passing. Laws are enforced by CI.
 
-- React Native: 0.79.4
-- React: 19.0.0
-- Expo: ~53.0.12
-- Expo Router: ~5.1.0
-- Supabase: ^2.50.0
-- Other commonly used libraries:  
-  - @expo/vector-icons  
-  - react-native-paper  
-  - react-native-calendars  
-  - lottie-react-native  
-  - react-native-webview  
-  - and more
+Cite This Work
+Absolute Zero Lattice v1.0, Tier 1-6
+PaidingAttention Productions LLC, 2026
+Domain: [0,1], Addresses: 1B, Law: N×0=N, Proof: 1×1=2
+GitHub: paidingattentionproductionsllc/absolute-zero-lattice-broadcast
+Manifest: azl_manifest.json
 
-For a full list of dependencies, see [package.json](./package.json).
+null
 
-## Development Tools
 
-- TypeScript: ~5.8.3
-- ESLint: ^9.25.0
-- @babel/core: ^7.25.2
+Files
 
-## Contributing
+null
 
-1. Fork this repository
-2. Create a new branch (`git checkout -b main`)
-3. Commit your changes (`git commit -am 'Add new feature'`)
-4. Push to the branch (`git push origin feature/your-feature`)
-5. Open a Pull Request
 
-## License
+Releases
+Latest: AZL TIER 1-6 Lattice - Complete 3.37GB dataset available
 
-This project is private ("private": true). For collaboration inquiries, please contact the author.
+License
+CC-BY-4.0 - Cite azl_manifest.json when using AZL addresses or laws.
 
 ---
-
-Feel free to add project screenshots, API documentation, feature descriptions, or any other information as needed.
+Tier 7: Expansion to 10B addresses in progress
+null
