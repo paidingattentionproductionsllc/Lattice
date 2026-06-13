@@ -64,6 +64,24 @@ python azl_lookup.py 847293847 --json
   "proof": "1×1=2"
 }
 
+### **Local AI Proxy (Development)**
+
+Start the local AZL agent proxy for development:
+
+```bash
+pnpm run start:ai
+```
+
+Then run the app with the proxy as the Supabase functions endpoint:
+
+```bash
+export EXPO_PUBLIC_SUPABASE_URL=http://localhost:8787
+export EXPO_PUBLIC_SUPABASE_ANON_KEY=anon
+pnpm start
+```
+
+The proxy supports `/functions/v1/azl-agent` and returns AZL-governed responses for local testing.
+
 null
 
 

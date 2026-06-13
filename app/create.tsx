@@ -38,7 +38,7 @@ export default function CreateScreen() {
     const tags = tagsInput.split(',').map(t => t.trim()).filter(Boolean);
     const platform = addPlatform(name.trim(), selectedType, purpose.trim(), tags);
     showAlert('Platform Spawned', `${name} is now building across all architecture layers.`, [
-      { text: 'View Platform', onPress: () => router.push(`/platform/${platform.id}`) },
+      { text: 'View Platform', onPress: () => router.push(`/platform/${platform.id}` as any) },
       { text: 'Back to Hub', style: 'cancel', onPress: () => router.back() },
     ]);
   };
