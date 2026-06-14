@@ -10,8 +10,8 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "build:web": "expo build:web",
-    "publish:web": "expo publish --web",
+    "build:web": "expo export:web web-build",
+    "publish:web": "echo \"Deploy web build artifacts using a static host or configured CI/CD pipeline.\"",
     "lint": "expo lint"
   },
   "dependencies": {

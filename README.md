@@ -90,13 +90,17 @@ Build the web app for production:
 pnpm run build:web
 ```
 
-Publish the web app from the Expo project:
+This generates the static `web-build` folder.
+
+For production deployment, serve the contents of `web-build` with any static host or CI/CD pipeline.
+
+If you want a release placeholder script, use this command after build finishes:
 
 ```bash
 pnpm run publish:web
 ```
 
-For a local preview of the production output, use any static server against `web-build` after build completes.
+It will print a reminder to deploy `web-build` to your hosting environment.
 
 null
 
