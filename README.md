@@ -82,6 +82,22 @@ pnpm start
 
 The proxy supports `/functions/v1/azl-agent` and returns AZL-governed responses for local testing.
 
+### **Web Production Build & Publish**
+
+Build the web app for production:
+
+```bash
+pnpm run build:web
+```
+
+Publish the web app from the Expo project:
+
+```bash
+pnpm run publish:web
+```
+
+For a local preview of the production output, use any static server against `web-build` after build completes.
+
 null
 
 
