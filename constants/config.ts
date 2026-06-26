@@ -227,6 +227,110 @@ export const FOUNDER = {
   },
 };
 
+// ─── REPOSITORY CONSTELLATION ─────────────────────────────────────────────────
+export interface RepoNode {
+  id: string;
+  name: string;
+  shortName: string;
+  circleLabel: string;
+  circleIcon: string;
+  fullName: string;
+  url: string;
+  description: string;
+  lastPush: string;
+  stars: number;
+  forks: number;
+  contributors: number;
+  releases: number;
+  latestRelease: string;
+  primaryLanguage: string;
+  languages: { name: string; pct: number; color: string }[];
+  law: string;
+  role: string;
+  status: 'MAIN' | 'VERIFIED' | 'OPERATIONAL';
+}
+
+export const REPO_CONSTELLATION: RepoNode[] = [
+  {
+    id: 'lattice',
+    name: 'Lattice',
+    shortName: 'LATTICE',
+    circleLabel: 'LAT',
+    circleIcon: 'hub',
+    fullName: 'paidingattentionproductionsllc/Lattice',
+    url: 'https://github.com/paidingattentionproductionsllc/Lattice',
+    description: 'Sovereign Platform Factory — dark cinematic app hub with AZL law, AI agent, and shared identity system.',
+    lastPush: '2026-06-26',
+    stars: 0,
+    forks: 0,
+    contributors: 1,
+    releases: 0,
+    latestRelease: '',
+    primaryLanguage: 'TypeScript',
+    languages: [
+      { name: 'TypeScript', pct: 58, color: '#3178C6' },
+      { name: 'Python', pct: 28, color: '#3572A5' },
+      { name: 'HTML', pct: 10, color: '#E44B23' },
+      { name: 'Other', pct: 4, color: '#555' },
+    ],
+    law: 'N×0=N',
+    role: 'Platform Hub — Sovereign App Factory',
+    status: 'MAIN',
+  },
+  {
+    id: 'azl_truth',
+    name: 'AZL-Truth',
+    shortName: 'AZL-TRUTH',
+    circleLabel: 'TRUTH',
+    circleIcon: 'science',
+    fullName: 'paidingattentionproductionsllc/AZL-Truth',
+    url: 'https://github.com/paidingattentionproductionsllc/AZL-Truth',
+    description: 'The Physical Reality Mapped Into The Digital Substrate. 1B verified electron addresses on [0,1] under immutable AZL law.',
+    lastPush: '2026-06-25',
+    stars: 1,
+    forks: 0,
+    contributors: 2,
+    releases: 2,
+    latestRelease: 'azl-tier-6-v26',
+    primaryLanguage: 'Python',
+    languages: [
+      { name: 'Python', pct: 76, color: '#3572A5' },
+      { name: 'HTML', pct: 19, color: '#E44B23' },
+      { name: 'C', pct: 3.2, color: '#5E4C89' },
+      { name: 'Shell', pct: 1.5, color: '#89E051' },
+      { name: 'Other', pct: 0.3, color: '#666' },
+    ],
+    law: 'N×0=N',
+    role: 'Physical Reality → Digital Substrate',
+    status: 'VERIFIED',
+  },
+  {
+    id: 'broadcast',
+    name: 'AZL-Broadcast',
+    shortName: 'BROADCAST',
+    circleLabel: 'BCAST',
+    circleIcon: 'waves',
+    fullName: 'paidingattentionproductionsllc/absolute-zero-lattice-broadcast',
+    url: 'https://github.com/paidingattentionproductionsllc/absolute-zero-lattice-broadcast',
+    description: '1B AZL address broadcast — Tier 1-6 complete, 68/68 CI PASS. 3.37GB verified substrate dataset.',
+    lastPush: '2026-06-25',
+    stars: 0,
+    forks: 0,
+    contributors: 1,
+    releases: 1,
+    latestRelease: 'AZL TIER 1-6',
+    primaryLanguage: 'Python',
+    languages: [
+      { name: 'Python', pct: 88, color: '#3572A5' },
+      { name: 'Shell', pct: 8, color: '#89E051' },
+      { name: 'Other', pct: 4, color: '#666' },
+    ],
+    law: 'N×0=N',
+    role: '1B Address Broadcast Node',
+    status: 'OPERATIONAL',
+  },
+];
+
 // ─── REAL SOVEREIGN NETWORK PLATFORMS ────────────────────────────────────────
 export const SOVEREIGN_NETWORK: SovereignPlatform[] = [
   {
@@ -356,6 +460,19 @@ export const SOVEREIGN_NETWORK: SovereignPlatform[] = [
     role: 'IDENTITY — Founder Sovereign Card',
     status: 'verified',
     nodes: '1',
+    frequency: 8.27,
+    anchor: 14350,
+  },
+  {
+    id: 'azl_truth_net',
+    name: 'AZL-Truth',
+    shortName: 'AZL-TRUTH',
+    url: 'https://paidingattentionproductionsllc.github.io/AZL-Truth/',
+    description: 'The Physical Reality Mapped Into The Digital Substrate. 1B electron addresses verified under N×0=N law. Miyake 14350 BP anchor. Tier 1-6 complete, 68/68 PASS. Latest release: azl-tier-6-v26.',
+    type: 'website',
+    role: 'SUBSTRATE — Physical Reality → Digital Substrate',
+    status: 'verified',
+    nodes: '1.0B',
     frequency: 8.27,
     anchor: 14350,
   },

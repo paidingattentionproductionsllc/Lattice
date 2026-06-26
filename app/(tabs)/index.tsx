@@ -121,7 +121,7 @@ export default function HubScreen() {
           <View style={styles.sectionHeader}>
             <Text style={styles.sectionLabel}>PLATFORMS</Text>
             <Pressable
-              onPress={() => router.push('/create' as any)}
+              onPress={() => router.push('/create')}
               style={({ pressed }) => [styles.spawnBtn, { opacity: pressed ? 0.7 : 1 }]}
             >
               <MaterialIcons name="add" size={16} color={Colors.bg} />
@@ -212,7 +212,6 @@ const styles = StyleSheet.create({
   netShort: { fontSize: FontSize.xs, color: Colors.textPrimary, fontWeight: '700', letterSpacing: 0.4 },
   layerIndex: { fontSize: FontSize.xs, color: Colors.textMuted, fontWeight: '700' },
   layerName: { fontSize: FontSize.sm, color: Colors.textPrimary, fontWeight: '600', marginTop: 2 },
-  layerChip: { alignItems: 'center', paddingHorizontal: Spacing.sm, paddingVertical: Spacing.sm, minWidth: 96 },
 
   logicRow: { gap: Spacing.sm },
   logicItem: {

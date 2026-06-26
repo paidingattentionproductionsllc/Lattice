@@ -428,37 +428,30 @@ export function PlatformProvider({ children }: { children: ReactNode }) {
     }
 
     try {
-      let data: any;
+      const { getSupabaseClient } = await import('@/template');
+      const supabase = getSupabaseClient();
 
-      if (useLocalAIFallback) {
-        const localResponse = await invokeLocalAzlAgent(conversationHistory.current);
-        data = localResponse;
-      } else {
-        const { getSupabaseClient } = await import('@/template');
-        const supabase = getSupabaseClient();
+      const { data, error } = await supabase.functions.invoke('azl-agent', {
+        body: { messages: conversationHistory.current, stream: false },
+      });
 
-        const result = await supabase.functions.invoke('azl-agent', {
-          body: { messages: conversationHistory.current, stream: false },
-        });
-
-        if (result.error) {
-          let errorMsg = result.error.message;
-          try {
-            const { FunctionsHttpError } = await import('@supabase/supabase-js');
-            if (result.error instanceof FunctionsHttpError) {
-              const statusCode = result.error.context?.status ?? 500;
-              const text = await result.error.context?.text();
-              errorMsg = `[Code: ${statusCode}] ${text || result.error.message}`;
-            }
-          } catch (_) {}
-          throw new Error(errorMsg);
-        }
-
-        data = result.data;
+      if (error) {
+        // Try to get the actual error details
+        let errorMsg = error.message;
+        try {
+          const { FunctionsHttpError } = await import('@supabase/supabase-js');
+          if (error instanceof FunctionsHttpError) {
+            const statusCode = error.context?.status ?? 500;
+            const text = await error.context?.text();
+            errorMsg = `[Code: ${statusCode}] ${text || error.message}`;
+          }
+        } catch (_) {}
+        throw new Error(errorMsg);
       }
 
       const aiContent: string = data?.content ?? 'No response from sovereign agent.';
 
+      // Store assistant reply in history
       conversationHistory.current.push({ role: 'assistant', content: aiContent });
 
       const agentMsg: AgentMessage = {
@@ -471,33 +464,13 @@ export function PlatformProvider({ children }: { children: ReactNode }) {
       };
       setAgentMessages(prev => [...prev, agentMsg]);
     } catch (err) {
-      console.error('AZL Agent call failed, falling back to local generation:', err);
+      console.error('AZL Agent call failed, falling back to local:', err);
+      // Graceful fallback to local response engine if edge function unavailable
       const response = generateAnchoredResponse(content);
       setAgentMessages(prev => [...prev, response]);
     } finally {
       setAgentThinking(false);
     }
-  };
-
-  const useLocalAIFallback = process.env.EXPO_PUBLIC_USE_LOCAL_AI_PROXY === 'true'
-    || !!process.env.EXPO_PUBLIC_SUPABASE_URL?.match(/localhost|127\.0\.0\.1/);
-
-  const localAIProxyUrl = process.env.EXPO_PUBLIC_LOCAL_AI_PROXY_URL
-    || 'http://localhost:8787/functions/v1/azl-agent';
-
-  const invokeLocalAzlAgent = async (messages: Array<{ role: string; content: string }>) => {
-    const response = await fetch(localAIProxyUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ messages, stream: false }),
-    });
-
-    if (!response.ok) {
-      const text = await response.text();
-      throw new Error(`Local AZL proxy error ${response.status}: ${text}`);
-    }
-
-    return response.json();
   };
 
   const deletePlatform = (id: string) => {

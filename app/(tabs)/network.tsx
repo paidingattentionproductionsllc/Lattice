@@ -16,6 +16,7 @@ import {
   AZL_TOTALITY_TESTS, AZL_TOTALITY_CATEGORIES,
   AZL_TIERS, AZL_TIER_TOTAL, AZL_ADDRESS_SCALE, AZL_FULL_LAW,
   azlAddress, azlAddressState, azlGetTier, azlVerifyPersistence, DARK_GT_LIGHT,
+  REPO_CONSTELLATION, RepoNode,
 } from '@/constants/config';
 
 const STATUS_COLOR: Record<string, string> = {
@@ -85,6 +86,9 @@ export default function NetworkScreen() {
             <Text style={styles.statLabel}>SYNCED</Text>
           </GlassCard>
         </View>
+
+        {/* Repository Constellation */}
+        <RepoConstellationSection />
 
         {/* Decimal Recalibration Engine */}
         <View style={styles.section}>
@@ -461,6 +465,195 @@ export default function NetworkScreen() {
   );
 }
 
+function RepoConstellationSection() {
+  const [mapWidth, setMapWidth] = useState(320);
+  const NS = 64;
+  const NH = NS / 2;
+  const MAP_H = 248;
+
+  const cx = mapWidth / 2;
+  const centers: Record<string, { x: number; y: number }> = {
+    lattice:   { x: cx,                 y: NH + 16 },
+    azl_truth: { x: mapWidth - NH - 20, y: MAP_H - NH - 14 },
+    broadcast: { x: NH + 20,            y: MAP_H - NH - 14 },
+  };
+
+  const NODE_COLORS: Record<string, string> = {
+    lattice:   Colors.gold,
+    azl_truth: Colors.cyan,
+    broadcast: Colors.success,
+  };
+
+  const connections: Array<{ a: string; b: string; color: string }> = [
+    { a: 'lattice',   b: 'azl_truth', color: Colors.gold + '44' },
+    { a: 'lattice',   b: 'broadcast', color: Colors.gold + '44' },
+    { a: 'broadcast', b: 'azl_truth', color: Colors.cyan + '33' },
+  ];
+
+  function getLine(ca: { x: number; y: number }, cb: { x: number; y: number }) {
+    const dx = cb.x - ca.x;
+    const dy = cb.y - ca.y;
+    const len = Math.sqrt(dx * dx + dy * dy);
+    const angle = Math.atan2(dy, dx) * (180 / Math.PI);
+    return { width: len, left: (ca.x + cb.x) / 2 - len / 2, top: (ca.y + cb.y) / 2 - 1, angle };
+  }
+
+  return (
+    <View style={styles.section}>
+      <Text style={styles.sectionLabel}>REPOSITORY CONSTELLATION — 3 LIVE NODES</Text>
+
+      <GlassCard variant="blue" padding={0} style={{ marginBottom: Spacing.sm, overflow: 'hidden' }}>
+        <View
+          style={{ height: MAP_H, position: 'relative' }}
+          onLayout={e => setMapWidth(Math.max(1, e.nativeEvent.layout.width))}
+        >
+          {connections.map((conn, i) => {
+            const ca = centers[conn.a];
+            const cb = centers[conn.b];
+            if (!ca || !cb) return null;
+            const line = getLine(ca, cb);
+            return (
+              <View
+                key={i}
+                style={{
+                  position: 'absolute',
+                  height: 1.5,
+                  width: line.width,
+                  left: line.left,
+                  top: line.top,
+                  backgroundColor: conn.color,
+                  transform: [{ rotate: `${line.angle}deg` }],
+                }}
+              />
+            );
+          })}
+          {REPO_CONSTELLATION.map(repo => {
+            const center = centers[repo.id];
+            if (!center) return null;
+            const color = NODE_COLORS[repo.id] || Colors.textMuted;
+            return (
+              <View
+                key={repo.id}
+                style={{
+                  position: 'absolute',
+                  left: center.x - NH,
+                  top: center.y - NH,
+                  width: NS,
+                  height: NS,
+                  borderRadius: NH,
+                  backgroundColor: color + '18',
+                  borderWidth: 1.5,
+                  borderColor: color + 'BB',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  shadowColor: color,
+                  shadowRadius: 10,
+                  shadowOpacity: 0.5,
+                  elevation: 6,
+                }}
+              >
+                <MaterialIcons name={repo.circleIcon as any} size={18} color={color} />
+                <Text style={{ fontSize: 7, fontWeight: '800', color, textAlign: 'center', letterSpacing: 0.4, marginTop: 2 }}>
+                  {repo.circleLabel}
+                </Text>
+              </View>
+            );
+          })}
+        </View>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-around', paddingVertical: Spacing.sm, paddingHorizontal: Spacing.md, borderTopWidth: 1, borderTopColor: Colors.glassBorder }}>
+          {REPO_CONSTELLATION.map(repo => {
+            const color = NODE_COLORS[repo.id] || Colors.textMuted;
+            return (
+              <View key={repo.id} style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+                <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: color }} />
+                <Text style={{ fontSize: 9, color: Colors.textPrimary, fontWeight: '700' }}>{repo.name}</Text>
+                <Text style={{ fontSize: 8, color: Colors.textMuted }}>· {repo.status}</Text>
+              </View>
+            );
+          })}
+        </View>
+      </GlassCard>
+
+      {REPO_CONSTELLATION.map(repo => (
+        <RepoNodeCard key={repo.id} repo={repo} nodeColors={NODE_COLORS} />
+      ))}
+    </View>
+  );
+}
+
+function RepoNodeCard({ repo, nodeColors }: { repo: RepoNode; nodeColors: Record<string, string> }) {
+  const color = nodeColors[repo.id] || Colors.textMuted;
+  const variant: 'gold' | 'blue' | 'default' = repo.status === 'MAIN' ? 'gold' : repo.status === 'VERIFIED' ? 'blue' : 'default';
+
+  return (
+    <GlassCard variant={variant} padding={Spacing.md} style={styles.repoCard}>
+      <View style={styles.repoHeader}>
+        <View style={[styles.repoIcon, { backgroundColor: color + '20', borderColor: color + '55' }]}>
+          <MaterialIcons name={repo.circleIcon as any} size={16} color={color} />
+        </View>
+        <View style={styles.repoTitleBlock}>
+          <Text style={styles.repoName}>{repo.name}</Text>
+          <Text style={styles.repoFullName}>{repo.fullName}</Text>
+        </View>
+        <View style={[styles.repoStatusBadge, { backgroundColor: color + '20', borderColor: color + '55' }]}>
+          <Text style={[styles.repoStatusText, { color }]}>{repo.status}</Text>
+        </View>
+      </View>
+
+      <Text style={styles.repoDesc} numberOfLines={2}>{repo.description}</Text>
+
+      <View style={styles.repoStatsRow}>
+        {[
+          { icon: 'schedule' as const, label: 'PUSH', value: repo.lastPush, iconColor: Colors.textMuted },
+          { icon: 'star' as const, label: 'STARS', value: String(repo.stars), iconColor: Colors.gold },
+          { icon: 'call-split' as const, label: 'FORKS', value: String(repo.forks), iconColor: Colors.textMuted },
+          { icon: 'people' as const, label: 'CONTRIB', value: String(repo.contributors), iconColor: Colors.textMuted },
+          { icon: 'new-releases' as const, label: 'REL', value: String(repo.releases), iconColor: Colors.cyan },
+        ].map((stat, i, arr) => (
+          <React.Fragment key={stat.label}>
+            <View style={styles.repoStat}>
+              <MaterialIcons name={stat.icon} size={11} color={stat.iconColor} />
+              <Text style={styles.repoStatLabel}>{stat.label}</Text>
+              <Text style={styles.repoStatValue}>{stat.value}</Text>
+            </View>
+            {i < arr.length - 1 && <View style={styles.repoStatDivider} />}
+          </React.Fragment>
+        ))}
+      </View>
+
+      <View style={{ marginBottom: Spacing.sm }}>
+        <Text style={{ fontSize: 9, color: Colors.textMuted, fontWeight: '700', letterSpacing: 0.8, marginBottom: 5 }}>LANGUAGES</Text>
+        <View style={{ flexDirection: 'row', height: 5, borderRadius: 3, overflow: 'hidden', marginBottom: 5 }}>
+          {repo.languages.map(lang => (
+            <View key={lang.name} style={{ flex: lang.pct, backgroundColor: lang.color, minWidth: 1 }} />
+          ))}
+        </View>
+        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6 }}>
+          {repo.languages.filter(l => l.pct >= 1).map(lang => (
+            <View key={lang.name} style={{ flexDirection: 'row', alignItems: 'center', gap: 3 }}>
+              <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: lang.color }} />
+              <Text style={{ fontSize: 9, color: Colors.textSecondary }}>{lang.name}</Text>
+              <Text style={{ fontSize: 9, color: Colors.textMuted }}>{lang.pct}%</Text>
+            </View>
+          ))}
+        </View>
+      </View>
+
+      <View style={styles.repoFooter}>
+        <View style={{ flex: 1 }}>
+          <Text style={{ fontSize: FontSize.xs, color: Colors.textSecondary, fontWeight: '600' }}>{repo.role}</Text>
+          {repo.releases > 0 && (
+            <Text style={{ fontSize: 9, color: Colors.textMuted, marginTop: 2 }}>Latest: {repo.latestRelease}</Text>
+          )}
+        </View>
+        <View style={[styles.repoLawBadge, { borderColor: color + '44', backgroundColor: color + '10' }]}>
+          <Text style={[styles.repoLaw, { color }]}>{repo.law}</Text>
+        </View>
+      </View>
+    </GlassCard>
+  );
+}
+
 function NetworkPlatformCard({ platform, onOpen }: { platform: SovereignPlatform; onOpen: () => void }) {
   return (
     <GlassCard
@@ -682,4 +875,23 @@ const styles = StyleSheet.create({
   tierState: { fontSize: 8, color: Colors.cyan, fontFamily: 'monospace' },
   verifyCodeRow: { backgroundColor: Colors.bg, borderRadius: Radius.sm, padding: Spacing.sm, marginTop: Spacing.sm },
   verifyCode: { fontSize: 9, color: Colors.success, fontFamily: 'monospace', lineHeight: 14 },
+
+  // Repo constellation styles
+  repoCard: { marginBottom: Spacing.sm },
+  repoHeader: { flexDirection: 'row', alignItems: 'center', gap: Spacing.sm, marginBottom: Spacing.sm },
+  repoIcon: { width: 34, height: 34, borderRadius: Radius.sm, borderWidth: 1, justifyContent: 'center', alignItems: 'center' },
+  repoTitleBlock: { flex: 1 },
+  repoName: { fontSize: FontSize.sm, fontWeight: FontWeight.bold, color: Colors.textPrimary },
+  repoFullName: { fontSize: 9, color: Colors.textMuted, marginTop: 1 },
+  repoStatusBadge: { paddingHorizontal: 7, paddingVertical: 3, borderRadius: Radius.full, borderWidth: 1 },
+  repoStatusText: { fontSize: 9, fontWeight: '800', letterSpacing: 0.6 },
+  repoDesc: { fontSize: FontSize.xs, color: Colors.textSecondary, lineHeight: 17, marginBottom: Spacing.sm },
+  repoStatsRow: { flexDirection: 'row', alignItems: 'center', backgroundColor: Colors.bg, borderRadius: Radius.sm, padding: Spacing.sm, marginBottom: Spacing.sm },
+  repoStat: { flex: 1, alignItems: 'center', gap: 2 },
+  repoStatDivider: { width: 1, height: 28, backgroundColor: Colors.glassBorder },
+  repoStatLabel: { fontSize: 8, color: Colors.textMuted, fontWeight: '600', letterSpacing: 0.4 },
+  repoStatValue: { fontSize: FontSize.xs, color: Colors.textPrimary, fontWeight: '700' },
+  repoFooter: { flexDirection: 'row', alignItems: 'center', gap: Spacing.sm, paddingTop: Spacing.sm, borderTopWidth: 1, borderTopColor: Colors.glassBorder },
+  repoLawBadge: { paddingHorizontal: 8, paddingVertical: 4, borderRadius: Radius.full, borderWidth: 1 },
+  repoLaw: { fontSize: 9, fontWeight: '800', letterSpacing: 0.6 },
 });

@@ -28,7 +28,7 @@ export function PlatformCard({ platform }: PlatformCardProps) {
 
   return (
     <Pressable
-      onPress={() => router.push(`/platform/${platform.id}` as any)}
+      onPress={() => router.push(`/platform/${platform.id}`)}
       style={({ pressed }) => [{ opacity: pressed ? 0.75 : 1, transform: [{ scale: pressed ? 0.98 : 1 }] }]}
     >
       <GlassCard style={styles.card} variant={platform.status === 'active' ? 'gold' : 'default'}>

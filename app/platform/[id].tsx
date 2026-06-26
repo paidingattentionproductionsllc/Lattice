@@ -191,7 +191,7 @@ export default function PlatformDetailScreen() {
                 style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
               >
                 <GlassCard
-                  style={platform.status === status ? [styles.statusBtn, styles.statusBtnActive] : styles.statusBtn}
+                  style={[styles.statusBtn, platform.status === status && styles.statusBtnActive]}
                   padding={Spacing.sm}
                 >
                   <Text style={[styles.statusBtnText, platform.status === status && { color: Colors.gold }]}>
